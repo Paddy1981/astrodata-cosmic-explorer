@@ -1256,7 +1256,7 @@ if "birth_date" not in st.session_state:
 if "birth_time" not in st.session_state:
     st.session_state["birth_time"] = datetime.strptime("12:00", "%H:%M").time()
 if "birth_location_key" not in st.session_state:
-    st.session_state["birth_location_key"] = "new_delhi"
+    st.session_state["birth_location_key"] = "delhi"
 
 # Sidebar with personal profile and location
 with st.sidebar:
@@ -1296,14 +1296,14 @@ with st.sidebar:
             "Birth Location:",
             list(LOCATIONS.keys()),
             format_func=lambda x: LOCATIONS[x]["name"],
-            index=list(LOCATIONS.keys()).index(st.session_state.get("birth_location_key", "new_delhi")) if st.session_state.get("birth_location_key", "new_delhi") in LOCATIONS else 0,
+            index=list(LOCATIONS.keys()).index(st.session_state.get("birth_location_key", "delhi")) if st.session_state.get("birth_location_key", "delhi") in LOCATIONS else 0,
             key="birth_location_input"
         )
         st.session_state["birth_location_key"] = birth_location_key
 
     # Show current profile summary if set
     if has_profile:
-        profile_loc = LOCATIONS.get(st.session_state["birth_location_key"], LOCATIONS["new_delhi"])
+        profile_loc = LOCATIONS.get(st.session_state["birth_location_key"], LOCATIONS["delhi"])
         st.markdown(f"""
         <div style="background: rgba(6, 147, 227, 0.1); padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem;">
             <div style="font-weight: 600;">👤 {st.session_state['user_display_name']}</div>
@@ -1319,7 +1319,7 @@ with st.sidebar:
     profile_name = st.session_state.get("user_display_name", "") or "Cosmic Explorer"
     profile_birth_date = st.session_state.get("birth_date", date(2000, 1, 1))
     profile_birth_time = st.session_state.get("birth_time", datetime.strptime("12:00", "%H:%M").time())
-    profile_birth_location = st.session_state.get("birth_location_key", "new_delhi")
+    profile_birth_location = st.session_state.get("birth_location_key", "delhi")
 
     st.markdown("---")
     st.markdown("### 📍 Your Location")
