@@ -1359,27 +1359,57 @@ with st.sidebar:
     st.markdown(f"**Hemisphere:** {hemisphere}")
     st.markdown(f"**Coordinates:** {user_lat:.4f}°, {user_lon:.4f}°")
 
-    # Navigation
+    # Navigation - Separated into Science and Astrology
     st.markdown("---")
-    st.markdown("### 🚀 Explore")
-    page = st.radio(
-        "Choose your journey:",
-        [
-            "🗺️ World Map",
-            "🌙 Celestial Calendar",
-            "📜 Birth Chart",
-            "🔄 Retrograde Tracker",
-            "⛅ Cosmic Weather",
-            "🕰️ Cosmic Time Machine",
-            "⭐ Your Cosmic Twin",
-            "🌍 Shared Sky",
-            "✉️ Cosmic Postcard",
-            "🔭 Light's Journey",
-            "🪐 Exoplanet Explorer",
-            "🌟 Star Stories"
-        ],
-        label_visibility="collapsed"
+
+    # Section selector
+    section = st.radio(
+        "Choose Section:",
+        ["🔭 Science & Astronomy", "🔮 Astrology"],
+        horizontal=True,
+        key="section_selector"
     )
+
+    st.markdown("---")
+
+    if section == "🔭 Science & Astronomy":
+        st.markdown("### 🔭 Science & Astronomy")
+        st.caption("Factual, educational content based on real data")
+        page = st.radio(
+            "Explore the cosmos:",
+            [
+                "🗺️ World Map",
+                "🌙 Celestial Calendar",
+                "🕰️ Cosmic Time Machine",
+                "🌍 Shared Sky",
+                "✉️ Cosmic Postcard",
+                "🔭 Light's Journey",
+                "🪐 Exoplanet Explorer",
+                "🌟 Star Stories",
+                "📊 My Sky Data"
+            ],
+            label_visibility="collapsed"
+        )
+    else:
+        st.markdown("### 🔮 Astrology")
+        st.caption("Cultural & spiritual interpretations")
+        page = st.radio(
+            "Explore your charts:",
+            [
+                "📜 Birth Chart",
+                "🔄 Retrograde Tracker",
+                "⛅ Cosmic Weather",
+                "⭐ Your Cosmic Twin"
+            ],
+            label_visibility="collapsed"
+        )
+
+        # Disclaimer for astrology section
+        st.markdown("""
+        <div style="background: rgba(249, 115, 22, 0.1); padding: 0.5rem; border-radius: 8px; border-left: 3px solid #f97316; margin-top: 1rem;">
+            <small style="color: #f97316;">⚠️ <b>Note:</b> Astrology is a belief system, not science. Presented for cultural & entertainment purposes.</small>
+        </div>
+        """, unsafe_allow_html=True)
 
 
 # ============== WORLD MAP PAGE ==============
@@ -2563,6 +2593,192 @@ The same stars that guided ancient civilizations shine on me today.
                 <span style="color: #9ca3af; font-size: 0.8rem;">{len(data['cultures'])} cultural traditions</span>
             </div>
             """, unsafe_allow_html=True)
+
+
+# ============== MY SKY DATA PAGE (Scientific) ==============
+
+elif page == "📊 My Sky Data":
+    st.header("📊 My Sky Data")
+    st.markdown("**Scientific view of celestial positions - no astrological interpretations**")
+
+    st.info("🔬 This page shows actual astronomical data for your birth date and location. These are scientific measurements based on celestial mechanics.")
+
+    # Input section
+    col1, col2 = st.columns([1, 2])
+
+    with col1:
+        st.subheader("Your Data")
+        sky_name = st.text_input("Your Name:", value=profile_name if profile_name != "Cosmic Explorer" else "")
+        sky_date = st.date_input("Date:", value=profile_birth_date)
+        sky_time = st.time_input("Time (local):", value=profile_birth_time)
+        sky_location = st.selectbox(
+            "Location:",
+            list(LOCATIONS.keys()),
+            format_func=lambda x: LOCATIONS[x]["name"],
+            index=list(LOCATIONS.keys()).index("mumbai") if "mumbai" in LOCATIONS else 0,
+            key="sky_data_location"
+        )
+
+        sky_lat = LOCATIONS[sky_location]["lat"]
+        sky_lon = LOCATIONS[sky_location]["lon"]
+        sky_place = LOCATIONS[sky_location]["name"]
+        sky_country = LOCATIONS[sky_location]["country"]
+        tz_offset = get_timezone_offset(sky_country)
+
+    with col2:
+        if sky_name:
+            # Calculate positions
+            sky_datetime = datetime.combine(sky_date, sky_time)
+            sky_positions = get_all_planetary_positions(sky_datetime, sky_lat, sky_lon, sky_country)
+
+            st.markdown(f"""
+            <div class="cosmic-card">
+                <h3 style="text-align: center;">🔭 Astronomical Snapshot</h3>
+                <div style="text-align: center; color: #9ca3af;">
+                    {sky_date.strftime('%B %d, %Y')} at {sky_time.strftime('%H:%M')} local time<br>
+                    📍 {sky_place} (UTC{'+' if tz_offset >= 0 else ''}{tz_offset})
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+
+            # Sun and Moon - Scientific
+            st.markdown("### Solar & Lunar Positions")
+            col_s1, col_s2 = st.columns(2)
+
+            with col_s1:
+                sun_pos = sky_positions["Sun"]
+                st.markdown(f"""
+                <div class="cosmic-card" style="text-align: center;">
+                    <div style="font-size: 2.5rem;">☀️</div>
+                    <div style="color: #fbbf24;"><b>Sun</b></div>
+                    <div style="font-size: 1.3rem;">{sun_pos['tropical']:.2f}°</div>
+                    <div style="color: #9ca3af;">Ecliptic Longitude</div>
+                    <div style="color: #9ca3af; font-size: 0.8rem; margin-top: 0.5rem;">
+                        In direction of: {sun_pos['sign']['name']} constellation<br>
+                        Distance: ~93 million miles
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+
+            with col_s2:
+                moon_pos = sky_positions["Moon"]
+                # Calculate moon phase
+                sun_lon = sky_positions["Sun"]["tropical"]
+                moon_lon = sky_positions["Moon"]["tropical"]
+                phase_angle = (moon_lon - sun_lon) % 360
+                if phase_angle < 45:
+                    moon_phase = "New Moon"
+                elif phase_angle < 90:
+                    moon_phase = "Waxing Crescent"
+                elif phase_angle < 135:
+                    moon_phase = "First Quarter"
+                elif phase_angle < 180:
+                    moon_phase = "Waxing Gibbous"
+                elif phase_angle < 225:
+                    moon_phase = "Full Moon"
+                elif phase_angle < 270:
+                    moon_phase = "Waning Gibbous"
+                elif phase_angle < 315:
+                    moon_phase = "Last Quarter"
+                else:
+                    moon_phase = "Waning Crescent"
+
+                st.markdown(f"""
+                <div class="cosmic-card" style="text-align: center;">
+                    <div style="font-size: 2.5rem;">🌙</div>
+                    <div style="color: #c0c0c0;"><b>Moon</b></div>
+                    <div style="font-size: 1.3rem;">{moon_pos['tropical']:.2f}°</div>
+                    <div style="color: #9ca3af;">Ecliptic Longitude</div>
+                    <div style="color: #9ca3af; font-size: 0.8rem; margin-top: 0.5rem;">
+                        Phase: {moon_phase}<br>
+                        Distance: ~238,855 miles
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+
+            # All planets table - Scientific
+            st.markdown("---")
+            st.markdown("### Planetary Positions (Ecliptic Coordinates)")
+            st.caption("Measured in degrees along the ecliptic from the Vernal Equinox (0° point)")
+
+            planet_info = {
+                "Sun": {"type": "Star", "note": "Center of solar system"},
+                "Moon": {"type": "Natural Satellite", "note": "Earth's only moon"},
+                "Mercury": {"type": "Terrestrial Planet", "note": "Smallest planet"},
+                "Venus": {"type": "Terrestrial Planet", "note": "Hottest planet"},
+                "Mars": {"type": "Terrestrial Planet", "note": "The Red Planet"},
+                "Jupiter": {"type": "Gas Giant", "note": "Largest planet"},
+                "Saturn": {"type": "Gas Giant", "note": "Famous rings"},
+            }
+
+            science_table = []
+            for planet in ["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn"]:
+                pos = sky_positions[planet]
+                info = planet_info[planet]
+                science_table.append({
+                    "Body": f"{PLANETS[planet]['symbol']} {planet}",
+                    "Type": info["type"],
+                    "Ecliptic Longitude": f"{pos['tropical']:.4f}°",
+                    "Constellation Direction": pos['sign']['name'],
+                    "Note": info["note"]
+                })
+            st.dataframe(pd.DataFrame(science_table), use_container_width=True, hide_index=True)
+
+            # Educational content
+            st.markdown("---")
+            st.markdown("### 📚 What This Data Means")
+
+            col_edu1, col_edu2 = st.columns(2)
+            with col_edu1:
+                st.markdown("""
+                <div class="cosmic-card">
+                    <h4>🌍 Ecliptic Longitude</h4>
+                    <p>The ecliptic is the apparent path the Sun traces across the sky over a year.
+                    We measure planetary positions in degrees (0° to 360°) along this path.</p>
+                    <p><b>0°</b> = Vernal Equinox point (where Sun is on March 20-21)</p>
+                </div>
+                """, unsafe_allow_html=True)
+
+            with col_edu2:
+                st.markdown("""
+                <div class="cosmic-card">
+                    <h4>🔭 Constellation Direction</h4>
+                    <p>When we say a planet is "in" a constellation, we mean it appears
+                    in that direction from Earth's viewpoint. The planet isn't physically
+                    near those stars - they're billions of miles apart.</p>
+                </div>
+                """, unsafe_allow_html=True)
+
+            # Daylight info
+            st.markdown("---")
+            st.markdown("### ☀️ Daylight Information")
+
+            # Approximate daylight calculation
+            day_of_year = sky_date.timetuple().tm_yday
+            # Simplified daylight calculation
+            declination = 23.45 * math.sin(math.radians((360/365) * (day_of_year - 81)))
+            lat_rad = math.radians(sky_lat)
+            dec_rad = math.radians(declination)
+
+            try:
+                hour_angle = math.acos(-math.tan(lat_rad) * math.tan(dec_rad))
+                daylight_hours = 2 * math.degrees(hour_angle) / 15
+            except:
+                daylight_hours = 12  # Default for edge cases
+
+            col_day1, col_day2, col_day3 = st.columns(3)
+            with col_day1:
+                st.metric("Approx. Daylight", f"{daylight_hours:.1f} hours")
+            with col_day2:
+                st.metric("Night Hours", f"{24 - daylight_hours:.1f} hours")
+            with col_day3:
+                season = "Spring" if 80 <= day_of_year < 172 else "Summer" if 172 <= day_of_year < 266 else "Autumn" if 266 <= day_of_year < 355 else "Winter"
+                if sky_lat < 0:  # Southern hemisphere
+                    season = {"Spring": "Autumn", "Summer": "Winter", "Autumn": "Spring", "Winter": "Summer"}[season]
+                st.metric("Season", season)
+
+        else:
+            st.info("👆 Enter your name to see your astronomical sky data!")
 
 
 # ============== REST OF THE PAGES (same as before, using user_lat, user_lon, user_name) ==============
