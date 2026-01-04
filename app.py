@@ -1248,15 +1248,32 @@ with col_theme:
 
 st.markdown('<p class="sub-header">Explore the Universe from Anywhere on Earth</p>', unsafe_allow_html=True)
 
+# Initialize session state for profile persistence
+if "user_display_name" not in st.session_state:
+    st.session_state["user_display_name"] = ""
+if "birth_date" not in st.session_state:
+    st.session_state["birth_date"] = date(2000, 1, 1)
+if "birth_time" not in st.session_state:
+    st.session_state["birth_time"] = datetime.strptime("12:00", "%H:%M").time()
+if "birth_location_key" not in st.session_state:
+    st.session_state["birth_location_key"] = "new_delhi"
+
 # Sidebar with personal profile and location
 with st.sidebar:
     # Personal Profile Section
     st.markdown("### 👤 Your Profile")
 
-    with st.expander("Enter Your Details", expanded=False):
-        user_display_name = st.text_input("Your Name:", value=st.session_state.get("user_display_name", ""), key="name_input")
-        if user_display_name:
-            st.session_state["user_display_name"] = user_display_name
+    # Check if profile is already set
+    has_profile = st.session_state.get("user_display_name", "") != ""
+
+    with st.expander("Your Details", expanded=not has_profile):
+        user_display_name = st.text_input(
+            "Your Name:",
+            value=st.session_state.get("user_display_name", ""),
+            key="name_input",
+            placeholder="Enter your name"
+        )
+        st.session_state["user_display_name"] = user_display_name
 
         birth_date = st.date_input(
             "Birth Date:",
@@ -1274,13 +1291,35 @@ with st.sidebar:
         )
         st.session_state["birth_time"] = birth_time
 
-        if user_display_name:
-            st.success(f"Welcome, {user_display_name}!")
+        # Birth location
+        birth_location_key = st.selectbox(
+            "Birth Location:",
+            list(LOCATIONS.keys()),
+            format_func=lambda x: LOCATIONS[x]["name"],
+            index=list(LOCATIONS.keys()).index(st.session_state.get("birth_location_key", "new_delhi")) if st.session_state.get("birth_location_key", "new_delhi") in LOCATIONS else 0,
+            key="birth_location_input"
+        )
+        st.session_state["birth_location_key"] = birth_location_key
 
-    # Get profile values
-    profile_name = st.session_state.get("user_display_name", "Cosmic Explorer")
+    # Show current profile summary if set
+    if has_profile:
+        profile_loc = LOCATIONS.get(st.session_state["birth_location_key"], LOCATIONS["new_delhi"])
+        st.markdown(f"""
+        <div style="background: rgba(6, 147, 227, 0.1); padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem;">
+            <div style="font-weight: 600;">👤 {st.session_state['user_display_name']}</div>
+            <div style="font-size: 0.85rem; color: #9ca3af;">
+                📅 {st.session_state['birth_date'].strftime('%b %d, %Y')}<br>
+                🕐 {st.session_state['birth_time'].strftime('%H:%M')}<br>
+                📍 {profile_loc['name']}
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    # Get profile values (used across all pages)
+    profile_name = st.session_state.get("user_display_name", "") or "Cosmic Explorer"
     profile_birth_date = st.session_state.get("birth_date", date(2000, 1, 1))
     profile_birth_time = st.session_state.get("birth_time", datetime.strptime("12:00", "%H:%M").time())
+    profile_birth_location = st.session_state.get("birth_location_key", "new_delhi")
 
     st.markdown("---")
     st.markdown("### 📍 Your Location")
