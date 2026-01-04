@@ -1419,6 +1419,11 @@ with st.sidebar:
             [
                 "🗺️ World Map",
                 "🌙 Celestial Calendar",
+                "🌃 Tonight's Sky",
+                "🌓 Moon Phases",
+                "🌅 Sun Times",
+                "🛰️ ISS Tracker",
+                "☄️ Meteor Showers",
                 "🕰️ Cosmic Time Machine",
                 "🌍 Shared Sky",
                 "✉️ Cosmic Postcard",
@@ -1842,6 +1847,499 @@ elif page == "🌙 Celestial Calendar":
             file_name=f"planetary_positions_{selected_datetime.strftime('%Y%m%d_%H%M')}.csv",
             mime="text/csv"
         )
+
+
+# ============== TONIGHT'S SKY PAGE ==============
+
+elif page == "🌃 Tonight's Sky":
+    st.header("🌃 Tonight's Sky")
+    st.markdown(f"**What's visible from {user_name} tonight?**")
+
+    now = datetime.now()
+    tonight_positions = get_all_planetary_positions(now, user_lat, user_lon, user_country)
+
+    # Visible planets tonight
+    st.subheader("🪐 Planets Visible Tonight")
+
+    visible_planets = []
+    for planet in ["Mercury", "Venus", "Mars", "Jupiter", "Saturn"]:
+        pos = tonight_positions[planet]
+        # Simplified visibility check based on elongation from Sun
+        sun_lon = tonight_positions["Sun"]["tropical"]
+        planet_lon = pos["tropical"]
+        elongation = abs(planet_lon - sun_lon)
+        if elongation > 180:
+            elongation = 360 - elongation
+
+        if elongation > 15:  # More than 15° from Sun = potentially visible
+            visible_planets.append({
+                "planet": planet,
+                "elongation": elongation,
+                "constellation": pos["sign"]["name"],
+                "symbol": PLANETS[planet]["symbol"]
+            })
+
+    if visible_planets:
+        cols = st.columns(len(visible_planets))
+        for i, vp in enumerate(visible_planets):
+            with cols[i]:
+                brightness = "Bright" if vp["planet"] in ["Venus", "Jupiter"] else "Visible"
+                st.markdown(f"""
+                <div class="cosmic-card" style="text-align: center;">
+                    <div style="font-size: 2.5rem;">{vp['symbol']}</div>
+                    <div style="font-weight: bold;">{vp['planet']}</div>
+                    <div style="color: #9ca3af;">In {vp['constellation']}</div>
+                    <div style="color: #22c55e; font-size: 0.8rem;">{brightness}</div>
+                </div>
+                """, unsafe_allow_html=True)
+    else:
+        st.info("No planets are well-positioned for viewing tonight. Try again tomorrow!")
+
+    # Moon info
+    st.markdown("---")
+    st.subheader("🌙 Tonight's Moon")
+
+    moon_pos = tonight_positions["Moon"]
+    sun_lon = tonight_positions["Sun"]["tropical"]
+    moon_lon = moon_pos["tropical"]
+    phase_angle = (moon_lon - sun_lon) % 360
+
+    # Determine moon phase
+    if phase_angle < 22.5:
+        moon_phase, moon_emoji = "New Moon", "🌑"
+    elif phase_angle < 67.5:
+        moon_phase, moon_emoji = "Waxing Crescent", "🌒"
+    elif phase_angle < 112.5:
+        moon_phase, moon_emoji = "First Quarter", "🌓"
+    elif phase_angle < 157.5:
+        moon_phase, moon_emoji = "Waxing Gibbous", "🌔"
+    elif phase_angle < 202.5:
+        moon_phase, moon_emoji = "Full Moon", "🌕"
+    elif phase_angle < 247.5:
+        moon_phase, moon_emoji = "Waning Gibbous", "🌖"
+    elif phase_angle < 292.5:
+        moon_phase, moon_emoji = "Last Quarter", "🌗"
+    elif phase_angle < 337.5:
+        moon_phase, moon_emoji = "Waning Crescent", "🌘"
+    else:
+        moon_phase, moon_emoji = "New Moon", "🌑"
+
+    illumination = (1 - math.cos(math.radians(phase_angle))) / 2 * 100
+
+    col_m1, col_m2 = st.columns(2)
+    with col_m1:
+        st.markdown(f"""
+        <div class="cosmic-card" style="text-align: center;">
+            <div style="font-size: 4rem;">{moon_emoji}</div>
+            <div style="font-size: 1.5rem; font-weight: bold;">{moon_phase}</div>
+            <div style="color: #9ca3af;">Illumination: {illumination:.0f}%</div>
+            <div style="color: #9ca3af;">In {moon_pos['sign']['name']}</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with col_m2:
+        st.markdown("""
+        <div class="cosmic-card">
+            <h4>Best Viewing Tips</h4>
+            <ul>
+                <li><b>Planets:</b> Look for steady, non-twinkling lights</li>
+                <li><b>Venus:</b> Brightest - visible near sunrise/sunset</li>
+                <li><b>Jupiter:</b> Very bright - visible most of night</li>
+                <li><b>Saturn:</b> Yellowish tint, rings visible with telescope</li>
+                <li><b>Mars:</b> Reddish color, varies in brightness</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+
+    # Upcoming celestial events
+    st.markdown("---")
+    st.subheader("📅 Upcoming Celestial Events")
+
+    events = [
+        {"date": "2025-01-13", "event": "Full Moon (Wolf Moon)", "type": "Moon"},
+        {"date": "2025-01-29", "event": "New Moon", "type": "Moon"},
+        {"date": "2025-03-14", "event": "Total Lunar Eclipse", "type": "Eclipse"},
+        {"date": "2025-03-29", "event": "Partial Solar Eclipse", "type": "Eclipse"},
+        {"date": "2025-04-08", "event": "Venus at Greatest Elongation", "type": "Planet"},
+        {"date": "2025-08-12", "event": "Perseid Meteor Shower Peak", "type": "Meteor"},
+    ]
+
+    for evt in events[:4]:
+        evt_date = datetime.strptime(evt["date"], "%Y-%m-%d")
+        days_until = (evt_date.date() - date.today()).days
+        if days_until >= 0:
+            emoji = "🌕" if evt["type"] == "Moon" else "🌑" if "New" in evt["event"] else "☀️" if evt["type"] == "Eclipse" else "☄️"
+            st.markdown(f"""
+            <div style="padding: 0.5rem; border-left: 3px solid #0693e3; margin: 0.5rem 0; background: rgba(6, 147, 227, 0.1); border-radius: 0 8px 8px 0;">
+                {emoji} <b>{evt['event']}</b><br>
+                <span style="color: #9ca3af;">{evt_date.strftime('%B %d, %Y')} ({days_until} days away)</span>
+            </div>
+            """, unsafe_allow_html=True)
+
+
+# ============== MOON PHASES PAGE ==============
+
+elif page == "🌓 Moon Phases":
+    st.header("🌓 Moon Phase Calendar")
+    st.markdown("**Track the lunar cycle throughout the month**")
+
+    # Month selector
+    col1, col2 = st.columns([1, 3])
+    with col1:
+        selected_year = st.selectbox("Year:", range(2020, 2031), index=5)
+        selected_month = st.selectbox("Month:", range(1, 13), index=date.today().month - 1,
+                                       format_func=lambda x: datetime(2000, x, 1).strftime('%B'))
+
+    with col2:
+        st.markdown(f"### {datetime(selected_year, selected_month, 1).strftime('%B %Y')}")
+
+        # Generate moon phases for the month
+        import calendar
+        num_days = calendar.monthrange(selected_year, selected_month)[1]
+
+        # Create calendar grid
+        phases_data = []
+        for day in range(1, num_days + 1):
+            day_date = date(selected_year, selected_month, day)
+            jd = julian_day(selected_year, selected_month, day, 12)
+
+            # Get sun and moon positions
+            sun_lon = get_sun_longitude(jd)
+            moon_lon = get_moon_longitude(jd)
+            phase_angle = (moon_lon - sun_lon) % 360
+
+            # Determine phase
+            if phase_angle < 22.5 or phase_angle >= 337.5:
+                emoji = "🌑"
+            elif phase_angle < 67.5:
+                emoji = "🌒"
+            elif phase_angle < 112.5:
+                emoji = "🌓"
+            elif phase_angle < 157.5:
+                emoji = "🌔"
+            elif phase_angle < 202.5:
+                emoji = "🌕"
+            elif phase_angle < 247.5:
+                emoji = "🌖"
+            elif phase_angle < 292.5:
+                emoji = "🌗"
+            else:
+                emoji = "🌘"
+
+            phases_data.append({"day": day, "emoji": emoji, "angle": phase_angle})
+
+        # Display as grid (7 columns for days of week)
+        first_weekday = date(selected_year, selected_month, 1).weekday()
+        weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+
+        # Header row
+        header_cols = st.columns(7)
+        for i, wd in enumerate(weekdays):
+            with header_cols[i]:
+                st.markdown(f"<div style='text-align: center; font-weight: bold;'>{wd}</div>", unsafe_allow_html=True)
+
+        # Calendar grid
+        day_idx = 0
+        for week in range(6):
+            if day_idx >= len(phases_data):
+                break
+            week_cols = st.columns(7)
+            for weekday in range(7):
+                with week_cols[weekday]:
+                    if week == 0 and weekday < first_weekday:
+                        st.write("")
+                    elif day_idx < len(phases_data):
+                        pd = phases_data[day_idx]
+                        is_today = date(selected_year, selected_month, pd["day"]) == date.today()
+                        bg = "rgba(6, 147, 227, 0.2)" if is_today else "transparent"
+                        st.markdown(f"""
+                        <div style="text-align: center; padding: 0.3rem; background: {bg}; border-radius: 8px;">
+                            <div style="font-size: 1.5rem;">{pd['emoji']}</div>
+                            <div style="font-size: 0.8rem;">{pd['day']}</div>
+                        </div>
+                        """, unsafe_allow_html=True)
+                        day_idx += 1
+
+    # Moon phase guide
+    st.markdown("---")
+    st.subheader("📖 Moon Phase Guide")
+    guide_cols = st.columns(4)
+    phases_info = [
+        ("🌑", "New Moon", "Moon between Earth & Sun - invisible"),
+        ("🌓", "First Quarter", "Right half illuminated - waxing"),
+        ("🌕", "Full Moon", "Moon opposite Sun - fully lit"),
+        ("🌗", "Last Quarter", "Left half illuminated - waning"),
+    ]
+    for i, (emoji, name, desc) in enumerate(phases_info):
+        with guide_cols[i]:
+            st.markdown(f"""
+            <div class="cosmic-card" style="text-align: center;">
+                <div style="font-size: 2rem;">{emoji}</div>
+                <div style="font-weight: bold;">{name}</div>
+                <div style="font-size: 0.8rem; color: #9ca3af;">{desc}</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+
+# ============== SUN TIMES PAGE ==============
+
+elif page == "🌅 Sun Times":
+    st.header("🌅 Sunrise & Sunset Calculator")
+    st.markdown(f"**Solar times for {user_name}**")
+
+    # Date selector
+    sun_date = st.date_input("Select Date:", value=date.today())
+
+    # Calculate sun times
+    day_of_year = sun_date.timetuple().tm_yday
+
+    # Solar declination
+    declination = 23.45 * math.sin(math.radians((360/365) * (day_of_year - 81)))
+
+    lat_rad = math.radians(user_lat)
+    dec_rad = math.radians(declination)
+
+    # Hour angle at sunrise/sunset
+    try:
+        cos_hour_angle = -math.tan(lat_rad) * math.tan(dec_rad)
+        cos_hour_angle = max(-1, min(1, cos_hour_angle))  # Clamp for polar regions
+        hour_angle = math.degrees(math.acos(cos_hour_angle))
+
+        # Solar noon (approximate)
+        solar_noon = 12.0 - (user_lon / 15)  # Adjust for longitude
+        tz_offset = get_timezone_offset(user_country)
+        solar_noon += tz_offset
+
+        sunrise_hour = solar_noon - (hour_angle / 15)
+        sunset_hour = solar_noon + (hour_angle / 15)
+        daylight_hours = 2 * hour_angle / 15
+
+        # Convert to time strings
+        def hours_to_time(h):
+            h = h % 24
+            hours = int(h)
+            minutes = int((h - hours) * 60)
+            return f"{hours:02d}:{minutes:02d}"
+
+        sunrise_time = hours_to_time(sunrise_hour)
+        sunset_time = hours_to_time(sunset_hour)
+
+        # Golden hour times
+        golden_morning_end = hours_to_time(sunrise_hour + 1)
+        golden_evening_start = hours_to_time(sunset_hour - 1)
+
+        # Display
+        col1, col2, col3 = st.columns(3)
+
+        with col1:
+            st.markdown(f"""
+            <div class="cosmic-card" style="text-align: center;">
+                <div style="font-size: 3rem;">🌅</div>
+                <div style="color: #f59e0b;"><b>Sunrise</b></div>
+                <div style="font-size: 2rem;">{sunrise_time}</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+        with col2:
+            st.markdown(f"""
+            <div class="cosmic-card" style="text-align: center;">
+                <div style="font-size: 3rem;">☀️</div>
+                <div style="color: #fbbf24;"><b>Solar Noon</b></div>
+                <div style="font-size: 2rem;">{hours_to_time(solar_noon)}</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+        with col3:
+            st.markdown(f"""
+            <div class="cosmic-card" style="text-align: center;">
+                <div style="font-size: 3rem;">🌇</div>
+                <div style="color: #ea580c;"><b>Sunset</b></div>
+                <div style="font-size: 2rem;">{sunset_time}</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+        # Additional info
+        st.markdown("---")
+        col_info1, col_info2 = st.columns(2)
+
+        with col_info1:
+            st.markdown(f"""
+            <div class="cosmic-card">
+                <h4>📊 Day Statistics</h4>
+                <div><b>Daylight:</b> {daylight_hours:.1f} hours</div>
+                <div><b>Night:</b> {24 - daylight_hours:.1f} hours</div>
+                <div><b>Solar Declination:</b> {declination:.1f}°</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+        with col_info2:
+            st.markdown(f"""
+            <div class="cosmic-card">
+                <h4>📸 Golden Hour (Best Light)</h4>
+                <div><b>Morning:</b> {sunrise_time} - {golden_morning_end}</div>
+                <div><b>Evening:</b> {golden_evening_start} - {sunset_time}</div>
+                <div style="color: #9ca3af; font-size: 0.85rem;">Perfect for photography!</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+    except:
+        st.warning("⚠️ This location experiences polar day or night on this date.")
+        if user_lat > 66.5:
+            st.info("🌞 24-hour daylight (Midnight Sun)")
+        else:
+            st.info("🌑 24-hour darkness (Polar Night)")
+
+
+# ============== ISS TRACKER PAGE ==============
+
+elif page == "🛰️ ISS Tracker":
+    st.header("🛰️ International Space Station Tracker")
+    st.markdown("**Track the ISS in real-time around Earth**")
+
+    st.info("🛰️ The ISS orbits Earth every ~92 minutes at 17,500 mph (28,000 km/h), about 250 miles (400 km) above Earth.")
+
+    # ISS orbital parameters (simplified)
+    now = datetime.now()
+    # ISS completes one orbit in ~92 minutes
+    orbital_period = 92  # minutes
+    time_since_midnight = now.hour * 60 + now.minute + now.second / 60
+
+    # Simulated ISS position (for demonstration)
+    orbital_position = (time_since_midnight / orbital_period * 360) % 360
+    iss_lat = 51.6 * math.sin(math.radians(orbital_position * 1.5))  # Inclined orbit
+    iss_lon = (orbital_position * 4 - 180) % 360 - 180
+
+    col1, col2 = st.columns([2, 1])
+
+    with col1:
+        # Create map with ISS position
+        iss_map = folium.Map(location=[0, 0], zoom_start=2, tiles='CartoDB dark_matter')
+
+        # Add ISS marker
+        folium.Marker(
+            [iss_lat, iss_lon],
+            popup="🛰️ ISS Current Position",
+            icon=folium.DivIcon(
+                html='<div style="font-size: 24px;">🛰️</div>',
+                icon_size=(30, 30),
+                icon_anchor=(15, 15)
+            )
+        ).add_to(iss_map)
+
+        # Add user location
+        folium.Marker(
+            [user_lat, user_lon],
+            popup=f"📍 {user_name}",
+            icon=folium.Icon(color='blue', icon='user')
+        ).add_to(iss_map)
+
+        # Draw orbit path (simplified)
+        orbit_points = []
+        for i in range(0, 360, 5):
+            lat = 51.6 * math.sin(math.radians(i * 1.5))
+            lon = (i * 4 - 180) % 360 - 180
+            orbit_points.append([lat, lon])
+        folium.PolyLine(orbit_points, color='yellow', weight=1, opacity=0.5).add_to(iss_map)
+
+        st_folium(iss_map, width=700, height=400)
+
+    with col2:
+        st.markdown(f"""
+        <div class="cosmic-card">
+            <h4>🛰️ ISS Now</h4>
+            <div><b>Latitude:</b> {iss_lat:.2f}°</div>
+            <div><b>Longitude:</b> {iss_lon:.2f}°</div>
+            <div><b>Altitude:</b> ~408 km</div>
+            <div><b>Speed:</b> 27,600 km/h</div>
+            <div style="margin-top: 1rem; color: #9ca3af; font-size: 0.85rem;">
+                ⚠️ Simulated position for demo.<br>
+                For live data, visit NASA's Spot The Station.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown("""
+        <div class="cosmic-card">
+            <h4>🔭 ISS Facts</h4>
+            <ul style="font-size: 0.9rem;">
+                <li>Crew: Usually 6-7 astronauts</li>
+                <li>Size: Football field length</li>
+                <li>Orbits: ~16 per day</li>
+                <li>Visible: 3rd brightest object in sky</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+
+
+# ============== METEOR SHOWERS PAGE ==============
+
+elif page == "☄️ Meteor Showers":
+    st.header("☄️ Meteor Shower Calendar")
+    st.markdown("**Plan your stargazing for the year's best meteor showers**")
+
+    meteor_showers = [
+        {"name": "Quadrantids", "peak": "Jan 3-4", "rate": "120/hr", "parent": "Asteroid 2003 EH1", "best_view": "Pre-dawn", "moon": "🌓"},
+        {"name": "Lyrids", "peak": "Apr 21-22", "rate": "18/hr", "parent": "Comet Thatcher", "best_view": "Pre-dawn", "moon": "🌘"},
+        {"name": "Eta Aquariids", "peak": "May 5-6", "rate": "50/hr", "parent": "Comet Halley", "best_view": "Pre-dawn", "moon": "🌓"},
+        {"name": "Delta Aquariids", "peak": "Jul 28-29", "rate": "20/hr", "parent": "Comet 96P/Machholz", "best_view": "After midnight", "moon": "🌑"},
+        {"name": "Perseids", "peak": "Aug 11-13", "rate": "100/hr", "parent": "Comet Swift-Tuttle", "best_view": "Pre-dawn", "moon": "🌕"},
+        {"name": "Orionids", "peak": "Oct 20-21", "rate": "20/hr", "parent": "Comet Halley", "best_view": "After midnight", "moon": "🌘"},
+        {"name": "Leonids", "peak": "Nov 17-18", "rate": "15/hr", "parent": "Comet Tempel-Tuttle", "best_view": "After midnight", "moon": "🌖"},
+        {"name": "Geminids", "peak": "Dec 13-14", "rate": "150/hr", "parent": "Asteroid 3200 Phaethon", "best_view": "All night", "moon": "🌔"},
+        {"name": "Ursids", "peak": "Dec 21-22", "rate": "10/hr", "parent": "Comet 8P/Tuttle", "best_view": "Pre-dawn", "moon": "🌘"},
+    ]
+
+    # Highlight current/upcoming shower
+    today = date.today()
+    st.subheader("🌠 2025 Meteor Shower Calendar")
+
+    for shower in meteor_showers:
+        # Determine if this shower is coming up
+        is_highlight = "Aug" in shower["peak"] or "Dec 13" in shower["peak"]  # Perseids and Geminids
+
+        bg_color = "rgba(6, 147, 227, 0.15)" if is_highlight else "rgba(99, 102, 241, 0.05)"
+        border = "2px solid #0693e3" if is_highlight else "1px solid rgba(99, 102, 241, 0.2)"
+
+        st.markdown(f"""
+        <div style="background: {bg_color}; border: {border}; border-radius: 12px; padding: 1rem; margin: 0.5rem 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <span style="font-size: 1.3rem; font-weight: bold;">☄️ {shower['name']}</span>
+                    {"<span style='background: #0693e3; color: white; padding: 2px 8px; border-radius: 4px; margin-left: 8px; font-size: 0.75rem;'>TOP PICK</span>" if is_highlight else ""}
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-weight: bold; color: #fbbf24;">{shower['rate']}</div>
+                    <div style="font-size: 0.8rem; color: #9ca3af;">meteors/hour</div>
+                </div>
+            </div>
+            <div style="display: flex; gap: 2rem; margin-top: 0.5rem; font-size: 0.9rem; color: #9ca3af;">
+                <span>📅 {shower['peak']}</span>
+                <span>🕐 {shower['best_view']}</span>
+                <span>🌙 {shower['moon']}</span>
+                <span>☄️ {shower['parent']}</span>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    # Viewing tips
+    st.markdown("---")
+    st.subheader("👀 Meteor Viewing Tips")
+
+    tips_cols = st.columns(3)
+    tips = [
+        ("🌑", "Dark Skies", "Get away from city lights. New Moon nights are best."),
+        ("👁️", "Adapt Your Eyes", "Allow 20-30 minutes for your eyes to adjust to darkness."),
+        ("🧥", "Be Comfortable", "Bring blankets, recline, and look at a wide area of sky."),
+    ]
+    for i, (emoji, title, desc) in enumerate(tips):
+        with tips_cols[i]:
+            st.markdown(f"""
+            <div class="cosmic-card" style="text-align: center;">
+                <div style="font-size: 2rem;">{emoji}</div>
+                <div style="font-weight: bold;">{title}</div>
+                <div style="font-size: 0.85rem; color: #9ca3af;">{desc}</div>
+            </div>
+            """, unsafe_allow_html=True)
 
 
 # ============== BIRTH CHART PAGE ==============
