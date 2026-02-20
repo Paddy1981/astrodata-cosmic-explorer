@@ -147,25 +147,43 @@ explanation: The first confirmed exoplanets were discovered in 1992 orbiting a p
         order_index: 2,
         content_mdx: `# How We Find Exoplanets
 
-Exoplanets are far too distant to photograph directly with most telescopes. So how do we find them?
+Exoplanets are far too distant to photograph directly with most telescopes. So how do we find them? Scientists use four main indirect detection methods — each exploiting a different physical effect that a planet has on its surroundings.
 
-## The Main Detection Methods
-
-### 1. Transit Photometry (most common)
+## Method 1: Transit Photometry
 
 When a planet passes in front of its star, it blocks a tiny fraction of starlight — causing a small, regular dip in brightness. This technique is used by NASA's **Kepler** and **TESS** missions and accounts for roughly **75%** of all known exoplanet discoveries.
 
-### 2. Radial Velocity (Doppler Method)
+:::interactive
+type: transit-method
+:::
 
-A planet's gravity causes its star to wobble slightly, shifting the star's light toward blue (approaching us) or red (receding). Measuring this Doppler shift reveals the planet's minimum mass.
+:::note
+The transit depth ΔF = (Rₚ/R★)² tells us the **planet's radius**. The time between transits gives us the **orbital period**. Together, Kepler's Third Law gives us the **orbital distance**.
+:::
 
-### 3. Direct Imaging
+## Method 2: Radial Velocity (Doppler Method)
 
-Taking an actual photograph of the planet itself — extremely difficult because the star is billions of times brighter. The **James Webb Space Telescope** is dramatically improving this capability.
+A planet's gravity causes its star to wobble slightly, shifting the star's light toward blue (approaching us) or red (receding from us). Measuring this Doppler shift reveals the planet's minimum mass. The precision required is extraordinary — we're measuring stellar motions of just a few metres per second!
 
-### 4. Gravitational Microlensing
+:::interactive
+type: radial-velocity
+:::
 
-When a star with planets passes in front of a background star, its gravity acts as a lens, briefly brightening the background star in a characteristic pattern.
+## Method 3: Direct Imaging
+
+Taking an actual photograph of the planet itself — extremely difficult because the star is billions of times brighter. A coronagraph blocks the star's light, then advanced optics cancel the remaining glare, allowing a faint planet glow to be detected in infrared. The **James Webb Space Telescope** is dramatically improving this capability.
+
+:::interactive
+type: direct-imaging
+:::
+
+## Method 4: Gravitational Microlensing
+
+When a foreground star passes in front of a background star, its gravity acts as a gravitational lens — briefly magnifying and brightening the background star. A planet around the lens star adds a short additional spike to this magnification event. Microlensing can detect planets too far from their stars for other methods.
+
+:::interactive
+type: microlensing
+:::
 
 :::quiz
 question: Which detection method accounts for roughly 75% of all confirmed exoplanet discoveries?
@@ -178,7 +196,7 @@ explanation: Transit photometry — detecting the dip in starlight as a planet c
 :::
 
 :::note
-The radial velocity method was historically the most successful before Kepler launched in 2009. It remains crucial because it measures a planet's **mass** — something transit photometry alone cannot tell us.
+Each method has its strengths: radial velocity measures **mass**, transits measure **radius**, direct imaging catches **young giant planets at wide orbits**, and microlensing finds **cold planets** beyond the snow line. Combining methods gives the most complete picture.
 :::
 
 :::quiz

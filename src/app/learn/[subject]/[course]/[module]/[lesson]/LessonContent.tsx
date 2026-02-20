@@ -3,8 +3,12 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import dynamic from "next/dynamic";
 
-const LightCurveAnalyzer = dynamic(() => import("./LightCurveAnalyzer"), { ssr: false });
-const StarFieldHunter = dynamic(() => import("./StarFieldHunter"), { ssr: false });
+const LightCurveAnalyzer      = dynamic(() => import("./LightCurveAnalyzer"),      { ssr: false });
+const StarFieldHunter          = dynamic(() => import("./StarFieldHunter"),          { ssr: false });
+const TransitMethodAnimation   = dynamic(() => import("./TransitMethodAnimation"),   { ssr: false });
+const RadialVelocityAnimation  = dynamic(() => import("./RadialVelocityAnimation"),  { ssr: false });
+const DirectImagingAnimation   = dynamic(() => import("./DirectImagingAnimation"),   { ssr: false });
+const MicrolensAnimation       = dynamic(() => import("./MicrolensAnimation"),       { ssr: false });
 
 export type Segment =
   | { type: "html"; htmlContent: string }
@@ -202,6 +206,18 @@ export default function LessonContent({
                 description={seg.config.description}
               />
             );
+          }
+          if (seg.interactiveType === "transit-method") {
+            return <TransitMethodAnimation key={i} description={seg.config.description} />;
+          }
+          if (seg.interactiveType === "radial-velocity") {
+            return <RadialVelocityAnimation key={i} description={seg.config.description} />;
+          }
+          if (seg.interactiveType === "direct-imaging") {
+            return <DirectImagingAnimation key={i} description={seg.config.description} />;
+          }
+          if (seg.interactiveType === "microlensing") {
+            return <MicrolensAnimation key={i} description={seg.config.description} />;
           }
           return null;
         }
