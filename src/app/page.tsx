@@ -25,6 +25,7 @@ const FEATURE_SECTIONS = [
       { href: "/star-stories", icon: "🌟", label: "Star Stories", desc: "Mythology & science of famous stars across cultures", badge: "8 Stars" },
       { href: "/discovery-lab", icon: "🔬", label: "Discovery Lab", desc: "Analyze exoplanet atmospheres with spectroscopy", badge: "Lab" },
       { href: "/asteroid-tracker", icon: "☄️", label: "Asteroid Tracker", desc: "Track near-Earth objects and assess threats", badge: "Alerts" },
+      { href: "/space-infrastructure", icon: "🌍", label: "Space Infrastructure", desc: "Interactive map of 130+ global launch sites, agencies & observatories", badge: "Map" },
     ],
   },
   {

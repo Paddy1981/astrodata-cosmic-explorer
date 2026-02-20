@@ -21,6 +21,7 @@ const NAV_SECTIONS = [
       { href: "/star-stories", label: "Star Stories", icon: "🌟" },
       { href: "/discovery-lab", label: "Discovery Lab", icon: "🔬" },
       { href: "/asteroid-tracker", label: "Asteroid Tracker", icon: "☄️" },
+      { href: "/space-infrastructure", label: "Space Infrastructure", icon: "🌍" },
     ],
   },
   {
