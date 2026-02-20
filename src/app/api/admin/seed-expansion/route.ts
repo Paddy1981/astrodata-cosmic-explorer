@@ -48,6 +48,7 @@ export async function POST() {
       const { data: cAtm, error: cAtmErr } = await adminClient
         .from("courses")
         .upsert({
+          id: "exoplanet-atmospheres",
           subject_id: subMap["exoplanets"],
           title: "Exoplanet Atmospheres & JWST",
           slug: "exoplanet-atmospheres",
@@ -56,7 +57,7 @@ export async function POST() {
           status: "published",
           order_index: 2,
           is_public: true,
-        }, { onConflict: "slug" })
+        }, { onConflict: "id" })
         .select().single();
       if (cAtmErr) throw new Error("course atm: " + cAtmErr.message);
       totalCourses++;
@@ -154,7 +155,7 @@ explanation: Stellar winds are streams of charged particles that can gradually e
         },
       ];
       for (const l of atmLessons) {
-        const { error: le } = await adminClient.from("lessons").upsert(l, { onConflict: "slug" });
+        const { error: le } = await adminClient.from("lessons").upsert({ ...l, id: l.slug }, { onConflict: "id" });
         if (le) throw new Error(`lesson ${l.slug}: ${le.message}`);
       }
       totalLessons += atmLessons.length;
@@ -167,6 +168,7 @@ explanation: Stellar winds are streams of charged particles that can gradually e
       const { data: cVar, error: cVarErr } = await adminClient
         .from("courses")
         .upsert({
+          id: "variable-stars",
           subject_id: subMap["stars"],
           title: "Variable Stars & Binary Systems",
           slug: "variable-stars",
@@ -175,7 +177,7 @@ explanation: Stellar winds are streams of charged particles that can gradually e
           status: "published",
           order_index: 2,
           is_public: true,
-        }, { onConflict: "slug" })
+        }, { onConflict: "id" })
         .select().single();
       if (cVarErr) throw new Error("course var: " + cVarErr.message);
       totalCourses++;
@@ -253,7 +255,7 @@ explanation: The Hubble constant measured from the CMB (early universe) and from
         },
       ];
       for (const l of varLessons) {
-        const { error: le } = await adminClient.from("lessons").upsert(l, { onConflict: "slug" });
+        const { error: le } = await adminClient.from("lessons").upsert({ ...l, id: l.slug }, { onConflict: "id" });
         if (le) throw new Error(`lesson ${l.slug}: ${le.message}`);
       }
       totalLessons += varLessons.length;
@@ -266,6 +268,7 @@ explanation: The Hubble constant measured from the CMB (early universe) and from
       const { data: cMoons, error: cMoonsErr } = await adminClient
         .from("courses")
         .upsert({
+          id: "moons-solar-system",
           subject_id: subMap["solar-system"],
           title: "Moons of the Solar System",
           slug: "moons-solar-system",
@@ -274,7 +277,7 @@ explanation: The Hubble constant measured from the CMB (early universe) and from
           status: "published",
           order_index: 2,
           is_public: true,
-        }, { onConflict: "slug" })
+        }, { onConflict: "id" })
         .select().single();
       if (cMoonsErr) throw new Error("course moons: " + cMoonsErr.message);
       totalCourses++;
@@ -347,7 +350,7 @@ explanation: Io's volcanic resurfacing rate (~1–3 cm/year) is so high that any
         },
       ];
       for (const l of moonLessons) {
-        const { error: le } = await adminClient.from("lessons").upsert(l, { onConflict: "slug" });
+        const { error: le } = await adminClient.from("lessons").upsert({ ...l, id: l.slug }, { onConflict: "id" });
         if (le) throw new Error(`lesson ${l.slug}: ${le.message}`);
       }
       totalLessons += moonLessons.length;
@@ -360,6 +363,7 @@ explanation: Io's volcanic resurfacing rate (~1–3 cm/year) is so high that any
       const { data: cRel, error: cRelErr } = await adminClient
         .from("courses")
         .upsert({
+          id: "relativity-spacetime",
           subject_id: subMap["black-holes"],
           title: "Relativity & Spacetime",
           slug: "relativity-spacetime",
@@ -368,7 +372,7 @@ explanation: Io's volcanic resurfacing rate (~1–3 cm/year) is so high that any
           status: "published",
           order_index: 2,
           is_public: true,
-        }, { onConflict: "slug" })
+        }, { onConflict: "id" })
         .select().single();
       if (cRelErr) throw new Error("course rel: " + cRelErr.message);
       totalCourses++;
@@ -446,7 +450,7 @@ explanation: During the 1919 eclipse, stars near the Sun appeared shifted by 1.7
         },
       ];
       for (const l of relLessons) {
-        const { error: le } = await adminClient.from("lessons").upsert(l, { onConflict: "slug" });
+        const { error: le } = await adminClient.from("lessons").upsert({ ...l, id: l.slug }, { onConflict: "id" });
         if (le) throw new Error(`lesson ${l.slug}: ${le.message}`);
       }
       totalLessons += relLessons.length;
@@ -463,7 +467,7 @@ explanation: During the 1919 eclipse, stars near the Sun appeared shifted by 1.7
 
     const { data: cCosmo, error: cCosmoErr } = await adminClient
       .from("courses")
-      .upsert({ subject_id: subCosmo.id, title: "The Big Bang & Beyond", slug: "big-bang-beyond", level_tag: ["intermediate", "advanced"], estimated_hours: 6, status: "published", order_index: 1, is_public: true }, { onConflict: "slug" })
+      .upsert({ id: "big-bang-beyond", subject_id: subCosmo.id, title: "The Big Bang & Beyond", slug: "big-bang-beyond", level_tag: ["intermediate", "advanced"], estimated_hours: 6, status: "published", order_index: 1, is_public: true }, { onConflict: "id" })
       .select().single();
     if (cCosmoErr) throw new Error("course cosmology: " + cCosmoErr.message);
     totalCourses++;
@@ -564,7 +568,7 @@ explanation: Heat Death is thermodynamic equilibrium at maximum entropy. All bla
       },
     ];
     for (const l of cosmoLessons) {
-      const { error: le } = await adminClient.from("lessons").upsert(l, { onConflict: "slug" });
+      const { error: le } = await adminClient.from("lessons").upsert({ ...l, id: l.slug }, { onConflict: "id" });
       if (le) throw new Error(`lesson ${l.slug}: ${le.message}`);
     }
     totalLessons += cosmoLessons.length;
@@ -580,7 +584,7 @@ explanation: Heat Death is thermodynamic equilibrium at maximum entropy. All bla
 
     const { data: cGal, error: cGalErr } = await adminClient
       .from("courses")
-      .upsert({ subject_id: subGal.id, title: "The Milky Way & Beyond", slug: "milky-way-beyond", level_tag: ["beginner", "intermediate"], estimated_hours: 5, status: "published", order_index: 1, is_public: true }, { onConflict: "slug" })
+      .upsert({ id: "milky-way-beyond", subject_id: subGal.id, title: "The Milky Way & Beyond", slug: "milky-way-beyond", level_tag: ["beginner", "intermediate"], estimated_hours: 5, status: "published", order_index: 1, is_public: true }, { onConflict: "id" })
       .select().single();
     if (cGalErr) throw new Error("course galaxies: " + cGalErr.message);
     totalCourses++;
@@ -674,7 +678,7 @@ explanation: Accretion onto a SMBH converts gravitational potential energy to ra
       },
     ];
     for (const l of galLessons) {
-      const { error: le } = await adminClient.from("lessons").upsert(l, { onConflict: "slug" });
+      const { error: le } = await adminClient.from("lessons").upsert({ ...l, id: l.slug }, { onConflict: "id" });
       if (le) throw new Error(`lesson ${l.slug}: ${le.message}`);
     }
     totalLessons += galLessons.length;
@@ -690,7 +694,7 @@ explanation: Accretion onto a SMBH converts gravitational potential energy to ra
 
     const { data: cObs, error: cObsErr } = await adminClient
       .from("courses")
-      .upsert({ subject_id: subObs.id, title: "How We See the Universe", slug: "how-we-see-universe", level_tag: ["beginner"], estimated_hours: 4, status: "published", order_index: 1, is_public: true }, { onConflict: "slug" })
+      .upsert({ id: "how-we-see-universe", subject_id: subObs.id, title: "How We See the Universe", slug: "how-we-see-universe", level_tag: ["beginner"], estimated_hours: 4, status: "published", order_index: 1, is_public: true }, { onConflict: "id" })
       .select().single();
     if (cObsErr) throw new Error("course obs: " + cObsErr.message);
     totalCourses++;
@@ -763,7 +767,7 @@ explanation: Two reasons: (1) Galaxies at z > 2 have their rest-frame optical li
       },
     ];
     for (const l of obsLessons) {
-      const { error: le } = await adminClient.from("lessons").upsert(l, { onConflict: "slug" });
+      const { error: le } = await adminClient.from("lessons").upsert({ ...l, id: l.slug }, { onConflict: "id" });
       if (le) throw new Error(`lesson ${l.slug}: ${le.message}`);
     }
     totalLessons += obsLessons.length;
@@ -779,7 +783,7 @@ explanation: Two reasons: (1) Galaxies at z > 2 have their rest-frame optical li
 
     const { data: cLife, error: cLifeErr } = await adminClient
       .from("courses")
-      .upsert({ subject_id: subAstro.id, title: "Is Anyone Out There?", slug: "life-in-universe", level_tag: ["beginner", "intermediate"], estimated_hours: 5, status: "published", order_index: 1, is_public: true }, { onConflict: "slug" })
+      .upsert({ id: "life-in-universe", subject_id: subAstro.id, title: "Is Anyone Out There?", slug: "life-in-universe", level_tag: ["beginner", "intermediate"], estimated_hours: 5, status: "published", order_index: 1, is_public: true }, { onConflict: "id" })
       .select().single();
     if (cLifeErr) throw new Error("course life: " + cLifeErr.message);
     totalCourses++;
@@ -870,7 +874,7 @@ explanation: The 21-cm line is emitted by neutral hydrogen — the most abundant
       },
     ];
     for (const l of lifeLessons) {
-      const { error: le } = await adminClient.from("lessons").upsert(l, { onConflict: "slug" });
+      const { error: le } = await adminClient.from("lessons").upsert({ ...l, id: l.slug }, { onConflict: "id" });
       if (le) throw new Error(`lesson ${l.slug}: ${le.message}`);
     }
     totalLessons += lifeLessons.length;
