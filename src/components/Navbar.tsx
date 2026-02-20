@@ -52,13 +52,13 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-14">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 no-underline">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#1a73e8] to-[#58a6ff] flex items-center justify-center text-white font-bold text-sm">
-              A
-            </div>
-            <span className="text-white font-semibold text-lg">
+            <span
+              className="text-xl font-bold tracking-tight"
+              style={{ fontFamily: "'Space Grotesk', sans-serif", background: "linear-gradient(135deg, #58a6ff 0%, #bc8cff 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}
+            >
               AstroData
             </span>
-            <span className="text-[#58a6ff] text-xs font-medium hidden sm:inline">
+            <span className="text-[#484f58] text-xs font-medium hidden sm:inline">
               by Larun
             </span>
           </Link>
