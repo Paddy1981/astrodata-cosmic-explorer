@@ -3,12 +3,27 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import dynamic from "next/dynamic";
 
+// ── Existing components ────────────────────────────────────────────────────────
 const LightCurveAnalyzer      = dynamic(() => import("./LightCurveAnalyzer"),      { ssr: false });
 const StarFieldHunter          = dynamic(() => import("./StarFieldHunter"),          { ssr: false });
 const TransitMethodAnimation   = dynamic(() => import("./TransitMethodAnimation"),   { ssr: false });
 const RadialVelocityAnimation  = dynamic(() => import("./RadialVelocityAnimation"),  { ssr: false });
 const DirectImagingAnimation   = dynamic(() => import("./DirectImagingAnimation"),   { ssr: false });
 const MicrolensAnimation       = dynamic(() => import("./MicrolensAnimation"),       { ssr: false });
+
+// ── New animation components ───────────────────────────────────────────────────
+const PlanetSizeSlider         = dynamic(() => import("./PlanetSizeSlider"),         { ssr: false });
+const OrbitalMechanicsAnimation= dynamic(() => import("./OrbitalMechanicsAnimation"),{ ssr: false });
+const HabitableZoneAnimation   = dynamic(() => import("./HabitableZoneAnimation"),   { ssr: false });
+const PlanetTypeComparison     = dynamic(() => import("./PlanetTypeComparison"),     { ssr: false });
+const StarFormationAnimation   = dynamic(() => import("./StarFormationAnimation"),   { ssr: false });
+const HRDiagramInteractive     = dynamic(() => import("./HRDiagramInteractive"),     { ssr: false });
+const StellarSpectraAnimation  = dynamic(() => import("./StellarSpectraAnimation"),  { ssr: false });
+const StellarEvolutionAnimation= dynamic(() => import("./StellarEvolutionAnimation"),{ ssr: false });
+const SolarSystemOrrery        = dynamic(() => import("./SolarSystemOrrery"),        { ssr: false });
+const BlackHoleLensing         = dynamic(() => import("./BlackHoleLensing"),         { ssr: false });
+const AccretionDiskAnimation   = dynamic(() => import("./AccretionDiskAnimation"),   { ssr: false });
+const GravWaveAnimation        = dynamic(() => import("./GravWaveAnimation"),        { ssr: false });
 
 export type Segment =
   | { type: "html"; htmlContent: string }
@@ -191,21 +206,12 @@ export default function LessonContent({
 
         // ── Interactive segment ────────────────────────────────────
         if (seg.type === "interactive") {
+          // ── Existing types ──
           if (seg.interactiveType === "light-curve") {
-            return (
-              <LightCurveAnalyzer
-                key={i}
-                description={seg.config.description}
-              />
-            );
+            return <LightCurveAnalyzer key={i} description={seg.config.description} />;
           }
           if (seg.interactiveType === "star-field") {
-            return (
-              <StarFieldHunter
-                key={i}
-                description={seg.config.description}
-              />
-            );
+            return <StarFieldHunter key={i} description={seg.config.description} />;
           }
           if (seg.interactiveType === "transit-method") {
             return <TransitMethodAnimation key={i} description={seg.config.description} />;
@@ -218,6 +224,44 @@ export default function LessonContent({
           }
           if (seg.interactiveType === "microlensing") {
             return <MicrolensAnimation key={i} description={seg.config.description} />;
+          }
+
+          // ── New types ──────────────────────────────────────────
+          if (seg.interactiveType === "planet-size") {
+            return <PlanetSizeSlider key={i} description={seg.config.description} />;
+          }
+          if (seg.interactiveType === "orbital-mechanics") {
+            return <OrbitalMechanicsAnimation key={i} description={seg.config.description} />;
+          }
+          if (seg.interactiveType === "habitable-zone") {
+            return <HabitableZoneAnimation key={i} description={seg.config.description} />;
+          }
+          if (seg.interactiveType === "planet-types") {
+            return <PlanetTypeComparison key={i} description={seg.config.description} />;
+          }
+          if (seg.interactiveType === "star-formation") {
+            return <StarFormationAnimation key={i} description={seg.config.description} />;
+          }
+          if (seg.interactiveType === "hr-diagram") {
+            return <HRDiagramInteractive key={i} description={seg.config.description} />;
+          }
+          if (seg.interactiveType === "stellar-spectra") {
+            return <StellarSpectraAnimation key={i} description={seg.config.description} />;
+          }
+          if (seg.interactiveType === "stellar-evolution") {
+            return <StellarEvolutionAnimation key={i} description={seg.config.description} />;
+          }
+          if (seg.interactiveType === "solar-system") {
+            return <SolarSystemOrrery key={i} description={seg.config.description} />;
+          }
+          if (seg.interactiveType === "black-hole-lensing" || seg.interactiveType === "schwarzschild") {
+            return <BlackHoleLensing key={i} description={seg.config.description} />;
+          }
+          if (seg.interactiveType === "accretion-disk") {
+            return <AccretionDiskAnimation key={i} description={seg.config.description} />;
+          }
+          if (seg.interactiveType === "grav-waves") {
+            return <GravWaveAnimation key={i} description={seg.config.description} />;
           }
           return null;
         }
