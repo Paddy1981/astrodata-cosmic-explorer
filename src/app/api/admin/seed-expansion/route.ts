@@ -54,7 +54,8 @@ export async function POST() {
           level_tag: ["intermediate", "advanced"],
           estimated_hours: 5,
           status: "published",
-          order: 2,
+          order_index: 2,
+          is_public: true,
         }, { onConflict: "slug" })
         .select().single();
       if (cAtmErr) throw new Error("course atm: " + cAtmErr.message);
@@ -172,7 +173,8 @@ explanation: Stellar winds are streams of charged particles that can gradually e
           level_tag: ["intermediate"],
           estimated_hours: 4,
           status: "published",
-          order: 2,
+          order_index: 2,
+          is_public: true,
         }, { onConflict: "slug" })
         .select().single();
       if (cVarErr) throw new Error("course var: " + cVarErr.message);
@@ -270,7 +272,8 @@ explanation: The Hubble constant measured from the CMB (early universe) and from
           level_tag: ["intermediate"],
           estimated_hours: 4,
           status: "published",
-          order: 2,
+          order_index: 2,
+          is_public: true,
         }, { onConflict: "slug" })
         .select().single();
       if (cMoonsErr) throw new Error("course moons: " + cMoonsErr.message);
@@ -363,7 +366,8 @@ explanation: Io's volcanic resurfacing rate (~1–3 cm/year) is so high that any
           level_tag: ["advanced"],
           estimated_hours: 5,
           status: "published",
-          order: 2,
+          order_index: 2,
+          is_public: true,
         }, { onConflict: "slug" })
         .select().single();
       if (cRelErr) throw new Error("course rel: " + cRelErr.message);
@@ -459,7 +463,7 @@ explanation: During the 1919 eclipse, stars near the Sun appeared shifted by 1.7
 
     const { data: cCosmo, error: cCosmoErr } = await adminClient
       .from("courses")
-      .upsert({ subject_id: subCosmo.id, title: "The Big Bang & Beyond", slug: "big-bang-beyond", level_tag: ["intermediate", "advanced"], estimated_hours: 6, status: "published", order: 1 }, { onConflict: "slug" })
+      .upsert({ subject_id: subCosmo.id, title: "The Big Bang & Beyond", slug: "big-bang-beyond", level_tag: ["intermediate", "advanced"], estimated_hours: 6, status: "published", order_index: 1, is_public: true }, { onConflict: "slug" })
       .select().single();
     if (cCosmoErr) throw new Error("course cosmology: " + cCosmoErr.message);
     totalCourses++;
@@ -576,7 +580,7 @@ explanation: Heat Death is thermodynamic equilibrium at maximum entropy. All bla
 
     const { data: cGal, error: cGalErr } = await adminClient
       .from("courses")
-      .upsert({ subject_id: subGal.id, title: "The Milky Way & Beyond", slug: "milky-way-beyond", level_tag: ["beginner", "intermediate"], estimated_hours: 5, status: "published", order: 1 }, { onConflict: "slug" })
+      .upsert({ subject_id: subGal.id, title: "The Milky Way & Beyond", slug: "milky-way-beyond", level_tag: ["beginner", "intermediate"], estimated_hours: 5, status: "published", order_index: 1, is_public: true }, { onConflict: "slug" })
       .select().single();
     if (cGalErr) throw new Error("course galaxies: " + cGalErr.message);
     totalCourses++;
@@ -686,7 +690,7 @@ explanation: Accretion onto a SMBH converts gravitational potential energy to ra
 
     const { data: cObs, error: cObsErr } = await adminClient
       .from("courses")
-      .upsert({ subject_id: subObs.id, title: "How We See the Universe", slug: "how-we-see-universe", level_tag: ["beginner"], estimated_hours: 4, status: "published", order: 1 }, { onConflict: "slug" })
+      .upsert({ subject_id: subObs.id, title: "How We See the Universe", slug: "how-we-see-universe", level_tag: ["beginner"], estimated_hours: 4, status: "published", order_index: 1, is_public: true }, { onConflict: "slug" })
       .select().single();
     if (cObsErr) throw new Error("course obs: " + cObsErr.message);
     totalCourses++;
@@ -775,7 +779,7 @@ explanation: Two reasons: (1) Galaxies at z > 2 have their rest-frame optical li
 
     const { data: cLife, error: cLifeErr } = await adminClient
       .from("courses")
-      .upsert({ subject_id: subAstro.id, title: "Is Anyone Out There?", slug: "life-in-universe", level_tag: ["beginner", "intermediate"], estimated_hours: 5, status: "published", order: 1 }, { onConflict: "slug" })
+      .upsert({ subject_id: subAstro.id, title: "Is Anyone Out There?", slug: "life-in-universe", level_tag: ["beginner", "intermediate"], estimated_hours: 5, status: "published", order_index: 1, is_public: true }, { onConflict: "slug" })
       .select().single();
     if (cLifeErr) throw new Error("course life: " + cLifeErr.message);
     totalCourses++;
