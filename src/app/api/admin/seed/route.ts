@@ -25,7 +25,7 @@ export async function POST() {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  // Service role client — uses createClient directly to guarantee RLS bypass
+  // Service role client — bypasses RLS
   const adminClient = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
@@ -33,7 +33,7 @@ export async function POST() {
   );
 
   try {
-    // ── Subject (new table, uuid PK) ─────────────────────────
+    // ── Subject ──────────────────────────────────────────────
     const { data: subject, error: subjectErr } = await adminClient
       .from("subjects")
       .upsert({
@@ -48,7 +48,7 @@ export async function POST() {
       .single();
     if (subjectErr) throw new Error("subjects: " + subjectErr.message);
 
-    // ── Course (existing table, text PK — provide stable ID) ─
+    // ── Course ───────────────────────────────────────────────
     const { data: course, error: courseErr } = await adminClient
       .from("courses")
       .upsert({
@@ -68,7 +68,7 @@ export async function POST() {
       .single();
     if (courseErr) throw new Error("courses: " + courseErr.message);
 
-    // ── Module (new table, uuid PK) ──────────────────────────
+    // ── Module ───────────────────────────────────────────────
     const { data: module, error: moduleErr } = await adminClient
       .from("modules")
       .upsert({
@@ -80,7 +80,7 @@ export async function POST() {
       .single();
     if (moduleErr) throw new Error("modules: " + moduleErr.message);
 
-    // ── Lessons (existing table, text PK — provide stable IDs)
+    // ── Lessons ──────────────────────────────────────────────
     const lessons = [
       {
         id: "worlds-beyond",
@@ -96,22 +96,44 @@ export async function POST() {
 
 For most of human history, we wondered: are we alone? Are there other planets out there, orbiting other stars?
 
-In 1992, astronomers confirmed the first **exoplanets** — planets orbiting a star outside our own Solar System. Since then, we've discovered over **5,500** confirmed exoplanets, with thousands more candidates waiting to be verified.
+In 1992, astronomers confirmed the first **exoplanets** — planets orbiting a star outside our own Solar System. Since then, we've discovered over **5,600** confirmed exoplanets, with thousands more candidates waiting to be verified.
 
-## What is an Exoplanet?
+## What Makes a Planet an "Exoplanet"?
 
 An **exoplanet** (short for *extra-solar planet*) is any planet that orbits a star other than our Sun. They come in incredible variety:
 
-- **Hot Jupiters** — gas giants orbiting extremely close to their stars, completing an orbit in just days
+- **Hot Jupiters** — gas giants orbiting extremely close to their stars, with a year lasting just days
 - **Super-Earths** — rocky planets larger than Earth but smaller than Neptune
-- **Mini-Neptunes** — small ice/gas worlds common in our galaxy
+- **Mini-Neptunes** — small ice/gas worlds, the most common planet type in our galaxy
 - **Earth-like planets** — rocky planets in the habitable zone where liquid water could exist
+
+:::quiz
+question: Which type of exoplanet completes a full orbit around its star in just a few days?
+- Super-Earth
+- Hot Jupiter
+- Mini-Neptune
+- Free-floating planet
+correct: 1
+explanation: Hot Jupiters are gas giants that orbit extremely close to their host stars — so close that their "year" lasts only 1–5 Earth days. This proximity to the star also makes them relatively easy to detect.
+:::
 
 ## The Scale of Discovery
 
-The nearest confirmed exoplanet, **Proxima Centauri b**, is 4.2 light-years away. That's 40 trillion kilometres — yet we can detect it using the faint dip in starlight it causes as it passes in front of its star.
+The nearest confirmed exoplanet, **Proxima Centauri b**, is 4.2 light-years away — that's 40 trillion kilometres. Yet we can still detect it from Earth using the faint dip in starlight it creates as it passes in front of its star.
 
-> **Key fact:** The Milky Way galaxy contains an estimated 100–400 billion stars. Most are believed to host at least one planet.`,
+:::key
+The Milky Way contains an estimated 100–400 billion stars. Most are believed to host at least one planet — meaning there could be **hundreds of billions of exoplanets** in our galaxy alone.
+:::
+
+:::quiz
+question: When were the first confirmed exoplanets discovered?
+- 1969 (Apollo era)
+- 1992 (orbiting a pulsar)
+- 2001 (Hubble Space Telescope)
+- 2009 (Kepler mission)
+correct: 1
+explanation: The first confirmed exoplanets were discovered in 1992 orbiting a pulsar (PSR 1257+12) by Wolszczan and Frail. The first planet confirmed around a Sun-like star, 51 Pegasi b, was found in 1995. Kepler launched in 2009 and dramatically accelerated the discovery rate.
+:::`,
       },
       {
         id: "how-we-find-exoplanets",
@@ -125,21 +147,49 @@ The nearest confirmed exoplanet, **Proxima Centauri b**, is 4.2 light-years away
         order_index: 2,
         content_mdx: `# How We Find Exoplanets
 
-Exoplanets are far too distant to photograph directly. So how do we find them?
+Exoplanets are far too distant to photograph directly with most telescopes. So how do we find them?
 
 ## The Main Detection Methods
 
 ### 1. Transit Photometry (most common)
-When a planet passes in front of its star, it blocks a tiny fraction of starlight — causing a small, regular dip in brightness. Used by NASA's Kepler and TESS missions. Accounts for ~75% of all known exoplanet discoveries.
+
+When a planet passes in front of its star, it blocks a tiny fraction of starlight — causing a small, regular dip in brightness. This technique is used by NASA's **Kepler** and **TESS** missions and accounts for roughly **75%** of all known exoplanet discoveries.
 
 ### 2. Radial Velocity (Doppler Method)
-A planet's gravity causes its star to wobble slightly, shifting the star's light blue or red. Reveals the planet's minimum mass.
+
+A planet's gravity causes its star to wobble slightly, shifting the star's light toward blue (approaching us) or red (receding). Measuring this Doppler shift reveals the planet's minimum mass.
 
 ### 3. Direct Imaging
-Taking an actual photograph of the planet — extremely difficult. The James Webb Space Telescope is improving this technique.
+
+Taking an actual photograph of the planet itself — extremely difficult because the star is billions of times brighter. The **James Webb Space Telescope** is dramatically improving this capability.
 
 ### 4. Gravitational Microlensing
-When a star with planets passes in front of a background star, its gravity acts as a lens, briefly brightening the background star.`,
+
+When a star with planets passes in front of a background star, its gravity acts as a lens, briefly brightening the background star in a characteristic pattern.
+
+:::quiz
+question: Which detection method accounts for roughly 75% of all confirmed exoplanet discoveries?
+- Radial Velocity
+- Direct Imaging
+- Transit Photometry
+- Gravitational Microlensing
+correct: 2
+explanation: Transit photometry — detecting the dip in starlight as a planet crosses its star — has discovered the vast majority of known exoplanets, thanks largely to NASA's Kepler telescope (2009–2018) and the ongoing TESS mission.
+:::
+
+:::note
+The radial velocity method was historically the most successful before Kepler launched in 2009. It remains crucial because it measures a planet's **mass** — something transit photometry alone cannot tell us.
+:::
+
+:::quiz
+question: The radial velocity method detects exoplanets by measuring what?
+- Changes in the star's brightness
+- The Doppler shift of the star's light caused by the planet's gravitational pull
+- Direct light reflected off the planet's surface
+- Gravitational bending of background starlight
+correct: 1
+explanation: An orbiting planet gravitationally tugs on its host star, causing the star to move in a tiny circle. When the star moves toward Earth, its light is slightly blueshifted; when it moves away, it is redshifted. Measuring these tiny Doppler shifts reveals the planet's orbital period and minimum mass.
+:::`,
       },
       {
         id: "transit-method",
@@ -153,24 +203,57 @@ When a star with planets passes in front of a background star, its gravity acts 
         order_index: 3,
         content_mdx: `# The Transit Method
 
-The transit method is the most successful exoplanet-hunting technique ever devised.
+The transit method is the most successful exoplanet-hunting technique ever devised. When a planet moves across the face of its star — as seen from Earth — it blocks a fraction of the starlight. A sensitive photometer records a characteristic brightness dip called a **transit**.
 
 ## Key Measurements from a Transit
 
 | Measurement | What it tells us |
 |---|---|
-| Transit depth (ΔF/F) | Planet-to-star radius ratio → planet size |
+| Transit depth (ΔF/F) | Planet-to-star radius ratio → **planet size** |
 | Transit duration | Orbital speed |
 | Transit period | Orbital distance (Kepler's 3rd Law) |
 
 ## The Transit Equation
 
-> **ΔF = (Rₚ/R★)²**
+:::formula
+**ΔF = (Rₚ / R★)²**
 
-For Earth transiting the Sun: ΔF ≈ 0.0084% — incredibly tiny!
-For a hot Jupiter: ΔF can be 1–2% — much more detectable.
+Where Rₚ is the planet's radius and R★ is the star's radius. The fraction of starlight blocked equals the **square** of the radius ratio.
+:::
 
-In the next lesson, you'll work with a real Kepler light curve and identify the transit signal yourself.`,
+## Worked Examples
+
+**Earth transiting the Sun:**
+- Earth radius: 6,371 km; Sun radius: 695,700 km
+- ΔF = (6,371 / 695,700)² ≈ **0.0084%** — only 84 parts per million!
+
+**Hot Jupiter transiting a Sun-like star:**
+- Planet radius ≈ 85,000 km; Star radius ≈ 695,700 km
+- ΔF = (85,000 / 695,700)² ≈ **1.49%** — much more detectable
+
+:::quiz
+question: If a planet's radius is exactly half its star's radius, what fraction of the star's light does it block during transit?
+- 50%
+- 25%
+- 12.5%
+- 6.25%
+correct: 1
+explanation: From the transit equation: ΔF = (Rₚ/R★)² = (0.5)² = 0.25 = 25%. The transit depth equals the **square** of the radius ratio — not the ratio itself. This is why even large planets block only a small fraction of starlight.
+:::
+
+:::note
+NASA's Kepler space telescope could detect brightness changes as small as **20 parts per million** — equivalent to spotting a gnat flying in front of a searchlight from a kilometre away.
+:::
+
+:::quiz
+question: A star's brightness dips by 1% during a transit. If the star has a radius of 1.0 R☉, what is the approximate planet radius?
+- 0.1 Jupiter radii
+- 0.7 Jupiter radii
+- 1.0 Jupiter radii
+- 10 Jupiter radii
+correct: 1
+explanation: Rₚ/R★ = √(0.01) = 0.1, so Rₚ = 0.1 × 695,700 km = 69,570 km. Since 1 Jupiter radius ≈ 71,492 km, this planet is about 0.97 Jupiter radii — a classic hot Jupiter!
+:::`,
       },
       {
         id: "first-light-curve",
@@ -184,22 +267,73 @@ In the next lesson, you'll work with a real Kepler light curve and identify the 
         order_index: 4,
         content_mdx: `# Your First Light Curve
 
-Time to work with real data. We're using Kepler Object of Interest (KOI) 17 — one of the first confirmed hot Jupiters in the Kepler dataset.
+Time to apply what you've learned. We'll analyze **Kepler Object of Interest 17 (KOI-17b)** — one of the first confirmed hot Jupiters in the Kepler dataset.
 
-## Practice Calculation
+## Reading a Light Curve
 
-Given:
-- Transit depth: **1.42%** (ΔF = 0.0142)
-- Star radius: **1.05 R☉**
+A **light curve** is a graph of a star's brightness over time. When a planet transits, you see:
 
-**Planet radius:**
-Rₚ = R★ × √(ΔF) = 1.05 × 695,700 km × √(0.0142) ≈ **87,000 km ≈ 1.25 Jupiter radii**
+1. **Baseline** — normal stellar brightness (normalized to 1.0)
+2. **Ingress** — brightness starts to drop as the planet moves in front
+3. **Flat bottom** — planet fully in front; maximum dimming
+4. **Egress** — planet moves away; brightness returns to baseline
 
-That's a classic hot Jupiter!
+:::note
+KOI-17b has a transit depth of **1.42%**, a transit period of **1.486 days**, and its host star has a radius of **1.05 solar radii**.
+:::
 
-> **Phase 2:** The interactive light curve viewer is coming in Phase 2 — you'll load real Kepler/TESS datasets and identify transit signals directly in the browser.
+## Worked Calculation
 
-🎉 **Module complete!** You've earned **275 XP** from this module.`,
+Using the transit equation to find KOI-17b's size:
+
+**Given:**
+- Transit depth: ΔF = 1.42% = 0.0142
+- Star radius: R★ = 1.05 R☉ = 1.05 × 695,700 km = **730,485 km**
+
+**Step 1:** Find the radius ratio
+- Rₚ / R★ = √(0.0142) ≈ **0.1192**
+
+**Step 2:** Find planet radius
+- Rₚ = 0.1192 × 730,485 km ≈ **87,034 km**
+
+**Step 3:** Convert to Jupiter radii (1 R♃ = 71,492 km)
+- Rₚ ≈ 87,034 / 71,492 ≈ **1.22 R♃**
+
+That's a classic hot Jupiter — about 22% larger than Jupiter itself!
+
+:::quiz
+question: A transit depth of 4% means the planet's radius is what fraction of the star's radius?
+- 4%
+- 20%
+- 2%
+- 40%
+correct: 1
+explanation: From ΔF = (Rₚ/R★)², we get Rₚ/R★ = √(ΔF) = √(0.04) = 0.20 = 20%. Always take the **square root** of the transit depth to find the radius ratio — not the depth value itself.
+:::
+
+:::exercise
+**Try it yourself:** A star of radius 0.9 R☉ shows a transit depth of 0.81%. What is the planet's radius in Earth radii?
+
+Step 1: ΔF = 0.81% = 0.0081
+
+Step 2: Rₚ/R★ = √(0.0081) = 0.09
+
+Step 3: Rₚ = 0.09 × 0.9 × 695,700 km = **56,352 km**
+
+Step 4: In Earth radii (R⊕ = 6,371 km): 56,352 / 6,371 ≈ **8.8 R⊕** — a super-Earth!
+:::
+
+:::quiz
+question: Why do we take the square root of the transit depth to find the radius ratio?
+- Because the planet is spherical, not circular
+- Because the transit equation is ΔF = (Rₚ/R★)², so the ratio is the square root of the depth
+- Because brightness is measured on a logarithmic scale
+- Because we need to correct for atmospheric limb darkening
+correct: 1
+explanation: The transit equation ΔF = (Rₚ/R★)² comes from geometry: the planet blocks light proportional to its **cross-sectional area** (πRₚ²), while the star emits light proportional to its visible area (πR★²). Their ratio gives the depth, so the radius ratio is the square root.
+:::
+
+🎉 **Module complete!** You've mastered transit photometry — the same technique used by real Kepler and TESS astronomers. In the next module, you'll load actual telescope data and identify transit signals yourself.`,
       },
     ];
 
@@ -211,7 +345,7 @@ That's a classic hot Jupiter!
     }
 
     return NextResponse.json({
-      message: `Seed complete! subject → course (${course.id}) → module → 4 lessons inserted.`,
+      message: `Seed complete! subject → course (${course.id}) → module → 4 lessons with interactive quiz questions inserted.`,
     });
   } catch (err: any) {
     return NextResponse.json({ error: err.message ?? "Unknown error" }, { status: 500 });
