@@ -95,10 +95,23 @@ export default function Navbar() {
                 )}
               </div>
             ))}
+            <Link
+              href="/learn"
+              className="px-3 py-2 text-sm font-semibold transition-colors rounded-md"
+              style={{ color: "#58a6ff" }}
+            >
+              Learn
+            </Link>
           </nav>
 
           {/* Right side */}
           <div className="flex items-center gap-3">
+            <Link
+              href="/login"
+              className="hidden sm:inline-flex btn-secondary text-xs px-3 py-1.5 no-underline"
+            >
+              Sign In
+            </Link>
             <a
               href="https://larun.space"
               target="_blank"
@@ -162,6 +175,25 @@ export default function Navbar() {
                 </div>
               </div>
             ))}
+            <div className="pt-2 border-t border-[#30363d]">
+              <Link
+                href="/learn"
+                onClick={() => setMobileOpen(false)}
+                className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm no-underline font-semibold"
+                style={{ color: "#58a6ff" }}
+              >
+                <span>🎓</span> AstroData Learn
+              </Link>
+            </div>
+            <div className="flex gap-2 pt-2 border-t border-[#30363d]">
+              <Link
+                href="/login"
+                onClick={() => setMobileOpen(false)}
+                className="btn-secondary text-xs flex-1 justify-center no-underline"
+              >
+                Sign In
+              </Link>
+            </div>
             <div className="flex gap-2 pt-2 border-t border-[#30363d]">
               <a
                 href="https://larun.space"

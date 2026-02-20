@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import StarField from "@/components/StarField";
+import ConditionalNav from "@/components/ConditionalNav";
 
 export const metadata: Metadata = {
   title: "AstroData Cosmic Explorer | Learn Space the Fun Way",
@@ -38,9 +39,13 @@ export default function RootLayout({
       <body>
         <StarField />
         <div className="relative z-10 min-h-screen flex flex-col">
-          <Navbar />
+          <ConditionalNav>
+            <Navbar />
+          </ConditionalNav>
           <main className="flex-1">{children}</main>
-          <Footer />
+          <ConditionalNav>
+            <Footer />
+          </ConditionalNav>
         </div>
       </body>
     </html>
