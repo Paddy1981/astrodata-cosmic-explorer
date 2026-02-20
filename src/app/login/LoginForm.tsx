@@ -36,9 +36,10 @@ export default function LoginForm() {
     e.preventDefault();
     setLoading(true);
     setError("");
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || window.location.origin;
     const { error } = await supabase.auth.signInWithOtp({
       email: magicEmail,
-      options: { emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback?next=${redirectTo}` },
+      options: { emailRedirectTo: `${siteUrl}/auth/callback?next=${redirectTo}` },
     });
     if (error) {
       setError(error.message);
@@ -52,9 +53,10 @@ export default function LoginForm() {
   async function handleGoogle() {
     setLoading(true);
     setError("");
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || window.location.origin;
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback?next=${redirectTo}` },
+      options: { redirectTo: `${siteUrl}/auth/callback?next=${redirectTo}` },
     });
     if (error) {
       setError(error.message);
