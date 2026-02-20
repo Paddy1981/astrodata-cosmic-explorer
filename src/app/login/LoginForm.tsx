@@ -53,10 +53,10 @@ export default function LoginForm() {
   async function handleGoogle() {
     setLoading(true);
     setError("");
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || window.location.origin;
+    const origin = window.location.origin;
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: `${siteUrl}/auth/callback?next=${redirectTo}` },
+      options: { redirectTo: `${origin}/auth/callback?next=${redirectTo}` },
     });
     if (error) {
       setError(error.message);
