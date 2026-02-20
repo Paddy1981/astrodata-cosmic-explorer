@@ -193,6 +193,28 @@ function parseMdxSegments(mdx: string): Segment[] {
 
     if (blockType === "quiz") {
       segments.push(parseQuizBlock(blockContent));
+    } else if (blockType === "interactive") {
+      // Parse key: value pairs
+      const config: Record<string, string> = {};
+      for (const line of blockContent.split("\n")) {
+        const m = line.match(/^([\w-]+)\s*:\s*(.+)$/);
+        if (m) config[m[1]] = m[2].trim();
+      }
+      // Multi-line description support
+      const descLines: string[] = [];
+      let inDesc = false;
+      for (const line of blockContent.split("\n")) {
+        if (line.startsWith("description:")) {
+          descLines.push(line.slice("description:".length).trim());
+          inDesc = true;
+        } else if (inDesc && !line.match(/^[\w-]+\s*:/)) {
+          descLines.push(line.trim());
+        } else if (line.match(/^[\w-]+\s*:/)) {
+          inDesc = false;
+        }
+      }
+      if (descLines.length > 0) config.description = descLines.join(" ").trim();
+      segments.push({ type: "interactive", interactiveType: config.type ?? "unknown", config });
     } else {
       segments.push({
         type: "callout",

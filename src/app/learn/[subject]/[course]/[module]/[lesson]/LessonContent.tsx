@@ -1,11 +1,16 @@
 "use client";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import dynamic from "next/dynamic";
+
+const LightCurveAnalyzer = dynamic(() => import("./LightCurveAnalyzer"), { ssr: false });
+const StarFieldHunter = dynamic(() => import("./StarFieldHunter"), { ssr: false });
 
 export type Segment =
   | { type: "html"; htmlContent: string }
   | { type: "callout"; calloutType: string; htmlContent: string }
-  | { type: "quiz"; question: string; options: string[]; correct: number; explanation: string };
+  | { type: "quiz"; question: string; options: string[]; correct: number; explanation: string }
+  | { type: "interactive"; interactiveType: string; config: Record<string, string> };
 
 interface Props {
   segments: Segment[];
@@ -178,6 +183,27 @@ export default function LessonContent({
               </div>
             </div>
           );
+        }
+
+        // ── Interactive segment ────────────────────────────────────
+        if (seg.type === "interactive") {
+          if (seg.interactiveType === "light-curve") {
+            return (
+              <LightCurveAnalyzer
+                key={i}
+                description={seg.config.description}
+              />
+            );
+          }
+          if (seg.interactiveType === "star-field") {
+            return (
+              <StarFieldHunter
+                key={i}
+                description={seg.config.description}
+              />
+            );
+          }
+          return null;
         }
 
         return null;

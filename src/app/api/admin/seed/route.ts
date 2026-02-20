@@ -253,6 +253,15 @@ question: A star's brightness dips by 1% during a transit. If the star has a rad
 - 10 Jupiter radii
 correct: 1
 explanation: Rₚ/R★ = √(0.01) = 0.1, so Rₚ = 0.1 × 695,700 km = 69,570 km. Since 1 Jupiter radius ≈ 71,492 km, this planet is about 0.97 Jupiter radii — a classic hot Jupiter!
+:::
+
+## Now Try It — Real Data
+
+Below is a 4.5-day Kepler light curve for the star **KIC-757450 (KOI-17)**. It contains three planetary transits. Click on one of the dips to identify it.
+
+:::interactive
+type: light-curve
+description: This is real data from NASA's Kepler space telescope. The star KIC-757450 is being orbited by a hot Jupiter called KOI-17b. You can see the characteristic flat-bottomed dips where the planet crosses in front. Click on one of the transit dips to identify it and reveal the planet's measured properties.
 :::`,
       },
       {
@@ -333,7 +342,61 @@ correct: 1
 explanation: The transit equation ΔF = (Rₚ/R★)² comes from geometry: the planet blocks light proportional to its **cross-sectional area** (πRₚ²), while the star emits light proportional to its visible area (πR★²). Their ratio gives the depth, so the radius ratio is the square root.
 :::
 
-🎉 **Module complete!** You've mastered transit photometry — the same technique used by real Kepler and TESS astronomers. In the next module, you'll load actual telescope data and identify transit signals yourself.`,
+🎉 **Module complete!** You've mastered transit photometry — the same technique used by real Kepler and TESS astronomers. In the next lesson, you'll use these skills to hunt for undiscovered exoplanets in a real Kepler dataset.`,
+      },
+      {
+        id: "planet-hunter-challenge",
+        course_id: course.id,
+        module_id: module.id,
+        title: "Planet Hunter Challenge",
+        slug: "planet-hunter-challenge",
+        content_type: "interactive",
+        xp_reward: 150,
+        difficulty_level: "intermediate",
+        order_index: 5,
+        content_mdx: `# Planet Hunter Challenge
+
+You've learned how transits work. Now it's time to think like a real Kepler scientist.
+
+## The Kepler Mission's Human Problem
+
+When Kepler launched in 2009, it began monitoring **150,000 stars** simultaneously — producing more data than any team of astronomers could manually review. NASA turned to citizen scientists through the **Planet Hunters** program on Zooniverse, where volunteers examined light curves and flagged transit candidates.
+
+Several confirmed exoplanets were first spotted by citizen scientists, not professional astronomers.
+
+:::key
+The planet **PH1b** (now Kepler-64b) was discovered in 2012 by two amateur astronomers, Kian Jek and Robert Gagliano, through the Planet Hunters program. It orbits a four-star system — a discovery that surprised the scientific community.
+:::
+
+## Your Mission
+
+Below are six stars from the Kepler field. Two of them show the characteristic periodic dimming of a transiting exoplanet. Study each star's light curve and flag the planet candidates.
+
+Look for:
+- A dip that goes **below the noise floor** (below flux 1.000 by more than random variation)
+- A **flat bottom** to the dip (the planet fully covers the same fraction of the star)
+- **Repeating** at equal time intervals (periodic signal)
+
+:::interactive
+type: star-field
+description: Six Kepler target stars are shown with their 5-day photometric records. Noise from stellar activity and instrument effects is present in all light curves. Two stars host transiting planets — find them and flag them as candidates before submitting your findings.
+:::
+
+:::quiz
+question: After flagging candidates, what would be the next step in the real Kepler pipeline?
+- Immediately announce the discovery as a confirmed exoplanet
+- Discard the signal and look for larger transits
+- Schedule radial velocity follow-up observations to measure the planet's mass and confirm it isn't a false positive
+- Wait for the planet to transit again in 10 years
+correct: 2
+explanation: Kepler candidates (called KOIs — Kepler Objects of Interest) must be confirmed through follow-up observations. Radial velocity measurements from ground-based spectrographs measure the star's Doppler wobble, confirming the planet's mass and ruling out false positives like eclipsing binary stars that can mimic transit signals.
+:::
+
+:::note
+On average, it takes **2–3 years** from initial Kepler flagging to confirmed exoplanet status, as each candidate requires spectroscopic follow-up, stellar characterisation, and peer review.
+:::
+
+Congratulations — you've completed Module 1 of Exoplanet Detective. You now understand how real exoplanet scientists think, measure, and discover new worlds.`,
       },
     ];
 
@@ -345,7 +408,7 @@ explanation: The transit equation ΔF = (Rₚ/R★)² comes from geometry: the p
     }
 
     return NextResponse.json({
-      message: `Seed complete! subject → course (${course.id}) → module → 4 lessons with interactive quiz questions inserted.`,
+      message: `Seed complete! subject → course (${course.id}) → module → 5 lessons (4 concept + 1 Planet Hunter interactive) inserted.`,
     });
   } catch (err: any) {
     return NextResponse.json({ error: err.message ?? "Unknown error" }, { status: 500 });
