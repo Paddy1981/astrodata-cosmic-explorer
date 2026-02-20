@@ -12,18 +12,35 @@ const DirectImagingAnimation   = dynamic(() => import("./DirectImagingAnimation"
 const MicrolensAnimation       = dynamic(() => import("./MicrolensAnimation"),       { ssr: false });
 
 // ── New animation components ───────────────────────────────────────────────────
-const PlanetSizeSlider         = dynamic(() => import("./PlanetSizeSlider"),         { ssr: false });
-const OrbitalMechanicsAnimation= dynamic(() => import("./OrbitalMechanicsAnimation"),{ ssr: false });
-const HabitableZoneAnimation   = dynamic(() => import("./HabitableZoneAnimation"),   { ssr: false });
-const PlanetTypeComparison     = dynamic(() => import("./PlanetTypeComparison"),     { ssr: false });
-const StarFormationAnimation   = dynamic(() => import("./StarFormationAnimation"),   { ssr: false });
-const HRDiagramInteractive     = dynamic(() => import("./HRDiagramInteractive"),     { ssr: false });
-const StellarSpectraAnimation  = dynamic(() => import("./StellarSpectraAnimation"),  { ssr: false });
-const StellarEvolutionAnimation= dynamic(() => import("./StellarEvolutionAnimation"),{ ssr: false });
-const SolarSystemOrrery        = dynamic(() => import("./SolarSystemOrrery"),        { ssr: false });
-const BlackHoleLensing         = dynamic(() => import("./BlackHoleLensing"),         { ssr: false });
-const AccretionDiskAnimation   = dynamic(() => import("./AccretionDiskAnimation"),   { ssr: false });
-const GravWaveAnimation        = dynamic(() => import("./GravWaveAnimation"),        { ssr: false });
+const PlanetSizeSlider              = dynamic(() => import("./PlanetSizeSlider"),              { ssr: false });
+const OrbitalMechanicsAnimation     = dynamic(() => import("./OrbitalMechanicsAnimation"),     { ssr: false });
+const HabitableZoneAnimation        = dynamic(() => import("./HabitableZoneAnimation"),        { ssr: false });
+const PlanetTypeComparison          = dynamic(() => import("./PlanetTypeComparison"),          { ssr: false });
+const StarFormationAnimation        = dynamic(() => import("./StarFormationAnimation"),        { ssr: false });
+const HRDiagramInteractive          = dynamic(() => import("./HRDiagramInteractive"),          { ssr: false });
+const StellarSpectraAnimation       = dynamic(() => import("./StellarSpectraAnimation"),       { ssr: false });
+const StellarEvolutionAnimation     = dynamic(() => import("./StellarEvolutionAnimation"),     { ssr: false });
+const SolarSystemOrrery             = dynamic(() => import("./SolarSystemOrrery"),             { ssr: false });
+const BlackHoleLensing              = dynamic(() => import("./BlackHoleLensing"),              { ssr: false });
+const AccretionDiskAnimation        = dynamic(() => import("./AccretionDiskAnimation"),        { ssr: false });
+const GravWaveAnimation             = dynamic(() => import("./GravWaveAnimation"),             { ssr: false });
+
+// ── Expansion animation components ────────────────────────────────────────────
+const TransmissionSpectraAnimation  = dynamic(() => import("./TransmissionSpectraAnimation"),  { ssr: false });
+const BiosignatureSpectraAnimation  = dynamic(() => import("./BiosignatureSpectraAnimation"),  { ssr: false });
+const CepheidAnimation              = dynamic(() => import("./CepheidAnimation"),              { ssr: false });
+const EclipsingBinaryAnimation      = dynamic(() => import("./EclipsingBinaryAnimation"),      { ssr: false });
+const TidalHeatingAnimation         = dynamic(() => import("./TidalHeatingAnimation"),         { ssr: false });
+const TimeDilationAnimation         = dynamic(() => import("./TimeDilationAnimation"),         { ssr: false });
+const SpacetimeCurvatureAnimation   = dynamic(() => import("./SpacetimeCurvatureAnimation"),   { ssr: false });
+const CosmicExpansionAnimation      = dynamic(() => import("./CosmicExpansionAnimation"),      { ssr: false });
+const CMBAnimation                  = dynamic(() => import("./CMBAnimation"),                  { ssr: false });
+const DarkEnergyAnimation           = dynamic(() => import("./DarkEnergyAnimation"),           { ssr: false });
+const GalaxyMorphologyAnimation     = dynamic(() => import("./GalaxyMorphologyAnimation"),     { ssr: false });
+const GalaxyRotationCurveAnimation  = dynamic(() => import("./GalaxyRotationCurveAnimation"),  { ssr: false });
+const EMSpectrumAnimation           = dynamic(() => import("./EMSpectrumAnimation"),           { ssr: false });
+const TelescopeOpticsAnimation      = dynamic(() => import("./TelescopeOpticsAnimation"),      { ssr: false });
+const DrakeEquationInteractive      = dynamic(() => import("./DrakeEquationInteractive"),      { ssr: false });
 
 export type Segment =
   | { type: "html"; htmlContent: string }
@@ -262,6 +279,53 @@ export default function LessonContent({
           }
           if (seg.interactiveType === "grav-waves") {
             return <GravWaveAnimation key={i} description={seg.config.description} />;
+          }
+
+          // ── Expansion types ────────────────────────────────────────
+          if (seg.interactiveType === "transmission-spectra") {
+            return <TransmissionSpectraAnimation key={i} description={seg.config.description} />;
+          }
+          if (seg.interactiveType === "biosignature-spectra") {
+            return <BiosignatureSpectraAnimation key={i} description={seg.config.description} />;
+          }
+          if (seg.interactiveType === "cepheid") {
+            return <CepheidAnimation key={i} description={seg.config.description} />;
+          }
+          if (seg.interactiveType === "eclipsing-binary") {
+            return <EclipsingBinaryAnimation key={i} description={seg.config.description} />;
+          }
+          if (seg.interactiveType === "tidal-heating") {
+            return <TidalHeatingAnimation key={i} description={seg.config.description} />;
+          }
+          if (seg.interactiveType === "time-dilation") {
+            return <TimeDilationAnimation key={i} description={seg.config.description} />;
+          }
+          if (seg.interactiveType === "spacetime-curvature") {
+            return <SpacetimeCurvatureAnimation key={i} description={seg.config.description} />;
+          }
+          if (seg.interactiveType === "cosmic-expansion") {
+            return <CosmicExpansionAnimation key={i} description={seg.config.description} />;
+          }
+          if (seg.interactiveType === "cmb") {
+            return <CMBAnimation key={i} description={seg.config.description} />;
+          }
+          if (seg.interactiveType === "dark-energy") {
+            return <DarkEnergyAnimation key={i} description={seg.config.description} />;
+          }
+          if (seg.interactiveType === "galaxy-morphology") {
+            return <GalaxyMorphologyAnimation key={i} description={seg.config.description} />;
+          }
+          if (seg.interactiveType === "galaxy-rotation") {
+            return <GalaxyRotationCurveAnimation key={i} description={seg.config.description} />;
+          }
+          if (seg.interactiveType === "em-spectrum") {
+            return <EMSpectrumAnimation key={i} description={seg.config.description} />;
+          }
+          if (seg.interactiveType === "telescope-optics") {
+            return <TelescopeOpticsAnimation key={i} description={seg.config.description} />;
+          }
+          if (seg.interactiveType === "drake-equation") {
+            return <DrakeEquationInteractive key={i} description={seg.config.description} />;
           }
           return null;
         }
