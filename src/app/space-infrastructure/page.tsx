@@ -533,27 +533,20 @@ export default function SpaceInfrastructurePage() {
       `}</style>
 
       {/* ── Page Header ── */}
-      <div className="border-b border-[#30363d] bg-[#161b22]/60 backdrop-blur-sm">
-        <div className="content-container py-4">
-          <div className="flex items-center justify-between flex-wrap gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#1a73e8] to-[#58a6ff] flex items-center justify-center text-2xl shadow-lg shadow-[#1a73e8]/20">
-                🌍
-              </div>
-              <div>
-                <h1 className="text-lg font-bold text-white">Global Space Infrastructure</h1>
-                <div id="infra-clbl" className="text-xs text-[#8b949e] mt-0.5">Loading…</div>
-              </div>
-            </div>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#484f58] text-sm pointer-events-none select-none">🔍</span>
-              <input
-                id="infra-srch"
-                type="text"
-                placeholder="Search name, country, operator…"
-                className="bg-[#1c2333] border border-[#30363d] rounded-lg pl-9 pr-4 py-2 text-sm text-[#e6edf3] placeholder-[#484f58] focus:outline-none focus:border-[#58a6ff] w-64 sm:w-72 transition-all duration-150"
-              />
-            </div>
+      <div className="content-container pt-6 pb-3">
+        <div className="flex items-end justify-between flex-wrap gap-4">
+          <div>
+            <h1 className="text-2xl font-bold text-white">Global Space Infrastructure</h1>
+            <div id="infra-clbl" className="text-sm text-[#8b949e] mt-1">Loading…</div>
+          </div>
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#484f58] text-sm pointer-events-none select-none">🔍</span>
+            <input
+              id="infra-srch"
+              type="text"
+              placeholder="Search name, country, operator…"
+              className="bg-[#1c2333] border border-[#30363d] rounded-lg pl-9 pr-4 py-2 text-sm text-[#e6edf3] placeholder-[#484f58] focus:outline-none focus:border-[#58a6ff] w-64 sm:w-72 transition-all duration-150"
+            />
           </div>
         </div>
       </div>
