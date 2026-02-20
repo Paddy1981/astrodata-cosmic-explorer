@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
+import { createClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 
 export async function POST() {
@@ -24,16 +25,11 @@ export async function POST() {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  // Service role client for writes
-  const adminClient = createServerClient(
+  // Service role client — uses createClient directly to guarantee RLS bypass
+  const adminClient = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    {
-      cookies: {
-        getAll() { return cookieStore.getAll(); },
-        setAll(c) { c.forEach(({ name, value, options }) => cookieStore.set(name, value, options)); },
-      },
-    }
+    { auth: { persistSession: false } }
   );
 
   try {
