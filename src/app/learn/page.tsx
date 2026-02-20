@@ -78,12 +78,16 @@ export default async function LearnDashboard() {
         <div className="cosmic-card p-5 flex flex-col justify-between">
           <div className="text-xs text-[#8b949e] uppercase tracking-wider mb-3">Quick Start</div>
           <p className="text-sm text-[#c9d1d9] mb-4">Pick up where you left off or start something new.</p>
-          <Link
-            href="/learn/exoplanets/exoplanet-detective/module-1/worlds-beyond"
-            className="btn-primary text-sm no-underline"
-          >
-            Continue Learning →
-          </Link>
+          {courses.length > 0 ? (
+            <Link
+              href={`/learn/exoplanets/exoplanet-detective/module-1/worlds-beyond`}
+              className="btn-primary text-sm no-underline"
+            >
+              Continue Learning →
+            </Link>
+          ) : (
+            <span className="text-xs text-[#8b949e]">No courses available yet.</span>
+          )}
         </div>
       </div>
 
