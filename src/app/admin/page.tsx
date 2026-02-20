@@ -27,6 +27,8 @@ export default function AdminPage() {
   // ── Seed ──
   const [seedStatus, setSeedStatus] = useState<"idle" | "running" | "done" | "error">("idle");
   const [seedMsg, setSeedMsg] = useState("");
+  const [seedExpStatus, setSeedExpStatus] = useState<"idle" | "running" | "done" | "error">("idle");
+  const [seedExpMsg, setSeedExpMsg] = useState("");
 
   const [msg, setMsg] = useState("");
 
@@ -83,6 +85,22 @@ export default function AdminPage() {
     const json = await res.json();
     if (res.ok) { setSeedStatus("done"); setSeedMsg(json.message ?? "Seed complete!"); }
     else { setSeedStatus("error"); setSeedMsg(json.error ?? "Seed failed."); }
+  }
+
+  async function runSeedExpansion() {
+    setSeedExpStatus("running");
+    setSeedExpMsg("");
+    const res = await fetch("/api/admin/seed-expansion", { method: "POST" });
+    const json = await res.json();
+    if (res.ok) {
+      setSeedExpStatus("done");
+      const b = json.breakdown;
+      setSeedExpMsg(`${json.message} · ${b?.totalNewCourses ?? 8} courses · ${b?.totalNewLessons ?? 30} lessons`);
+      load();
+    } else {
+      setSeedExpStatus("error");
+      setSeedExpMsg(json.error ?? "Seed expansion failed.");
+    }
   }
 
   const inputCls = "w-full px-3 py-2 bg-[#0d1117] border border-[#30363d] rounded-lg text-[#e6edf3] text-sm focus:outline-none focus:border-[#58a6ff] transition-colors";
@@ -236,21 +254,52 @@ export default function AdminPage() {
 
       {/* Seed */}
       {tab === "seed" && (
-        <div className="cosmic-card p-8 text-center max-w-md mx-auto">
-          <div className="text-4xl mb-4">🌱</div>
-          <h3 className="text-lg font-semibold text-[#e6edf3] mb-2">Seed Course 1 Module 1</h3>
-          <p className="text-[#8b949e] text-sm mb-6">
-            Inserts the Exoplanet Detective course with 4 starter lessons.
-            Safe to run multiple times — uses upsert.
-          </p>
-          {seedMsg && (
-            <div className={`mb-4 p-3 rounded-lg text-sm ${seedStatus === "error" ? "bg-[#f85149]/10 border border-[#f85149]/30 text-[#f85149]" : "bg-[#3fb950]/10 border border-[#3fb950]/30 text-[#3fb950]"}`}>
-              {seedMsg}
-            </div>
-          )}
-          <button onClick={runSeed} disabled={seedStatus === "running"} className="btn-primary">
-            {seedStatus === "running" ? "Running…" : "Run Seed"}
-          </button>
+        <div className="space-y-6 max-w-2xl mx-auto">
+          {/* Original seed */}
+          <div className="cosmic-card p-8 text-center">
+            <div className="text-4xl mb-4">🌱</div>
+            <h3 className="text-lg font-semibold text-[#e6edf3] mb-2">Seed — Phase 1 (4 Subjects, 23 Lessons)</h3>
+            <p className="text-[#8b949e] text-sm mb-6">
+              Inserts Exoplanets, Stars, Solar System, Black Holes subjects with all original lessons.
+              Safe to run multiple times — uses upsert.
+            </p>
+            {seedMsg && (
+              <div className={`mb-4 p-3 rounded-lg text-sm ${seedStatus === "error" ? "bg-[#f85149]/10 border border-[#f85149]/30 text-[#f85149]" : "bg-[#3fb950]/10 border border-[#3fb950]/30 text-[#3fb950]"}`}>
+                {seedMsg}
+              </div>
+            )}
+            <button onClick={runSeed} disabled={seedStatus === "running"} className="btn-primary">
+              {seedStatus === "running" ? "Running…" : "Run Seed (Phase 1)"}
+            </button>
+          </div>
+
+          {/* Expansion seed */}
+          <div className="cosmic-card p-8 text-center">
+            <div className="text-4xl mb-4">🚀</div>
+            <h3 className="text-lg font-semibold text-[#e6edf3] mb-2">Seed Expansion — Phase 2 (8 New Courses, 30 Lessons)</h3>
+            <p className="text-[#8b949e] text-sm mb-3">
+              Adds 4 new courses in existing subjects + 4 brand-new subjects:
+            </p>
+            <ul className="text-xs text-[#484f58] text-left inline-block mb-6 space-y-1">
+              <li>🪐 Exoplanet Atmospheres &amp; JWST (4 lessons)</li>
+              <li>⭐ Variable Stars &amp; Binary Systems (3 lessons)</li>
+              <li>☀️ Moons of the Solar System (3 lessons)</li>
+              <li>🕳️ Relativity &amp; Spacetime (3 lessons)</li>
+              <li>🌌 Cosmology → The Big Bang &amp; Beyond (4 lessons)</li>
+              <li>🌀 Galaxies → The Milky Way &amp; Beyond (4 lessons)</li>
+              <li>🔭 Observational Astronomy (3 lessons)</li>
+              <li>👽 Astrobiology → Is Anyone Out There? (4 lessons)</li>
+            </ul>
+            {seedExpMsg && (
+              <div className={`mb-4 p-3 rounded-lg text-sm ${seedExpStatus === "error" ? "bg-[#f85149]/10 border border-[#f85149]/30 text-[#f85149]" : "bg-[#3fb950]/10 border border-[#3fb950]/30 text-[#3fb950]"}`}>
+                {seedExpMsg}
+              </div>
+            )}
+            <button onClick={runSeedExpansion} disabled={seedExpStatus === "running"} className="btn-primary"
+              style={{ background: "linear-gradient(135deg, #bc8cff 0%, #58a6ff 100%)" }}>
+              {seedExpStatus === "running" ? "Seeding…" : "Run Seed Expansion (Phase 2)"}
+            </button>
+          </div>
         </div>
       )}
     </div>
