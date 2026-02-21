@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
+import EnrolButton from "./EnrolButton";
+import PremiumGate from "./PremiumGate";
 
 interface Props {
   params: { subject: string; course: string };
@@ -9,11 +11,24 @@ interface Props {
 export default async function CoursePage({ params }: Props) {
   const supabase = getSupabaseServerClient();
 
+  const { data: { user } } = await supabase.auth.getUser();
+
   const { data: course } = await supabase
     .from("courses")
     .select("*, subjects(title, slug, color)")
     .eq("slug", params.course)
     .single();
+
+  // Fetch user's premium status
+  let userIsPremium = false;
+  if (user) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("is_premium")
+      .eq("id", user.id)
+      .single();
+    userIsPremium = profile?.is_premium ?? false;
+  }
 
   if (!course) notFound();
 
@@ -27,6 +42,38 @@ export default async function CoursePage({ params }: Props) {
   const color = subject?.color ?? "#58a6ff";
   const allLessons = (modules ?? []).flatMap((m: any) => m.lessons ?? []);
   const totalXp = allLessons.reduce((sum: number, l: any) => sum + (l.xp_reward ?? 0), 0);
+
+  // Sorted first lesson for CTA
+  const sortedLessons = [...allLessons].sort(
+    (a: any, b: any) => (a.order_index ?? 0) - (b.order_index ?? 0)
+  );
+  const firstLessonSlug = sortedLessons[0]?.slug ?? "";
+  const firstLessonHref = `/learn/${params.subject}/${params.course}/module-1/${firstLessonSlug}`;
+
+  // Auth-dependent data
+  let isEnrolled = false;
+  let completedLessonIds = new Set<string>();
+
+  if (user) {
+    const [enrollRes, progressRes] = await Promise.all([
+      supabase
+        .from("course_enrollments")
+        .select("id")
+        .eq("user_id", user.id)
+        .eq("course_id", course.id)
+        .maybeSingle(),
+      supabase
+        .from("user_progress")
+        .select("lesson_id")
+        .eq("user_id", user.id)
+        .eq("status", "completed"),
+    ]);
+    isEnrolled = !!enrollRes.data;
+    const lessonIds = new Set(allLessons.map((l: any) => l.id));
+    (progressRes.data ?? []).forEach((p: any) => {
+      if (lessonIds.has(p.lesson_id)) completedLessonIds.add(p.lesson_id);
+    });
+  }
 
   return (
     <div className="content-container py-10 max-w-4xl mx-auto">
@@ -64,6 +111,11 @@ export default async function CoursePage({ params }: Props) {
               <span>📚 {allLessons.length} lessons</span>
               <span>⭐ {totalXp} XP available</span>
               <span>📦 {(modules ?? []).length} modules</span>
+              {isEnrolled && completedLessonIds.size > 0 && (
+                <span className="text-[#3fb950]">
+                  ✓ {completedLessonIds.size} / {allLessons.length} completed
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -105,15 +157,28 @@ export default async function CoursePage({ params }: Props) {
                       quiz: "❓",
                     };
                     const moduleSlug = `module-${mi + 1}`;
+                    const done = completedLessonIds.has(lesson.id);
                     return (
                       <Link
                         key={lesson.id}
                         href={`/learn/${params.subject}/${params.course}/${moduleSlug}/${lesson.slug}`}
                         className="flex items-center gap-4 px-6 py-4 no-underline hover:bg-[#1c2333] transition-colors group"
                       >
-                        <span className="text-[#484f58] text-sm w-5 shrink-0">{li + 1}</span>
+                        <span className="text-[#484f58] text-sm w-5 shrink-0 text-center">
+                          {done ? (
+                            <span className="text-[#3fb950] font-bold">✓</span>
+                          ) : (
+                            li + 1
+                          )}
+                        </span>
                         <span className="text-lg shrink-0">{typeIcon[lesson.content_type] ?? "📄"}</span>
-                        <span className="flex-1 text-sm text-[#c9d1d9] group-hover:text-white transition-colors">
+                        <span
+                          className={`flex-1 text-sm transition-colors ${
+                            done
+                              ? "text-[#484f58] line-through"
+                              : "text-[#c9d1d9] group-hover:text-white"
+                          }`}
+                        >
                           {lesson.title}
                         </span>
                         <div className="flex items-center gap-2 shrink-0">
@@ -134,16 +199,56 @@ export default async function CoursePage({ params }: Props) {
         )}
       </div>
 
-      {/* Start button */}
+      {/* CTA: premium gate / enrol / sign-in */}
       {allLessons.length > 0 && (
-        <div className="mt-8 text-center">
-          <Link
-            href={`/learn/${params.subject}/${params.course}/module-1/${allLessons.sort((a: any, b: any) => (a.order_index ?? 0) - (b.order_index ?? 0))[0]?.slug}`}
-            className="btn-primary no-underline text-base px-8 py-3"
-          >
-            Start Course →
-          </Link>
-        </div>
+        <>
+          {/* Premium course + non-premium user → gate */}
+          {course.is_premium && user && !userIsPremium && (
+            <PremiumGate courseTitle={course.title} color={color} />
+          )}
+
+          {/* Premium course + no user → sign in (they may be premium) */}
+          {course.is_premium && !user && (
+            <div className="mt-8 text-center space-y-3">
+              <Link
+                href={`/login?redirectTo=/learn/${params.subject}/${params.course}`}
+                className="btn-primary no-underline text-base px-8 py-3 inline-block"
+              >
+                Sign in to Access →
+              </Link>
+              <p className="text-xs text-[#484f58]">
+                Premium course —{" "}
+                <Link href="/learn/upgrade" className="text-[#58a6ff] no-underline hover:underline">
+                  upgrade your account
+                </Link>{" "}
+                to unlock.
+              </p>
+            </div>
+          )}
+
+          {/* Free course OR premium user → normal enrol flow */}
+          {(!course.is_premium || userIsPremium) && user && (
+            <div className="mt-8 text-center">
+              <EnrolButton
+                courseId={course.id}
+                firstLessonHref={firstLessonHref}
+                isEnrolled={isEnrolled}
+              />
+            </div>
+          )}
+
+          {/* Free course + no user → sign in */}
+          {!course.is_premium && !user && (
+            <div className="mt-8 text-center">
+              <Link
+                href={`/login?redirectTo=/learn/${params.subject}/${params.course}`}
+                className="btn-primary no-underline text-base px-8 py-3"
+              >
+                Sign in to Enrol →
+              </Link>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

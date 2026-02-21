@@ -65,6 +65,7 @@ export async function POST(req: NextRequest) {
           difficulty: "intermediate",
           order_index: 2,
           is_public: true,
+          is_premium: true,
         }, { onConflict: "id" })
         .select().single();
       if (cAtmErr) throw new Error("course atm: " + cAtmErr.message);
@@ -187,6 +188,7 @@ explanation: Stellar winds are streams of charged particles that can gradually e
           difficulty: "intermediate",
           order_index: 2,
           is_public: true,
+          is_premium: true,
         }, { onConflict: "id" })
         .select().single();
       if (cVarErr) throw new Error("course var: " + cVarErr.message);
@@ -289,6 +291,7 @@ explanation: The Hubble constant measured from the CMB (early universe) and from
           difficulty: "intermediate",
           order_index: 2,
           is_public: true,
+          is_premium: true,
         }, { onConflict: "id" })
         .select().single();
       if (cMoonsErr) throw new Error("course moons: " + cMoonsErr.message);
@@ -386,6 +389,7 @@ explanation: Io's volcanic resurfacing rate (~1–3 cm/year) is so high that any
           difficulty: "advanced",
           order_index: 2,
           is_public: true,
+          is_premium: true,
         }, { onConflict: "id" })
         .select().single();
       if (cRelErr) throw new Error("course rel: " + cRelErr.message);
@@ -481,7 +485,7 @@ explanation: During the 1919 eclipse, stars near the Sun appeared shifted by 1.7
 
     const { data: cCosmo, error: cCosmoErr } = await adminClient
       .from("courses")
-      .upsert({ id: "big-bang-beyond", subject_id: subCosmo.id, title: "The Big Bang & Beyond", slug: "big-bang-beyond", description: "From the Big Bang to dark energy — the origin and fate of the universe.", level_tag: ["intermediate", "advanced"], estimated_hours: 6, status: "published", difficulty: "intermediate", order_index: 1, is_public: true }, { onConflict: "id" })
+      .upsert({ id: "big-bang-beyond", subject_id: subCosmo.id, title: "The Big Bang & Beyond", slug: "big-bang-beyond", description: "From the Big Bang to dark energy — the origin and fate of the universe.", level_tag: ["intermediate", "advanced"], estimated_hours: 6, status: "published", difficulty: "intermediate", order_index: 1, is_public: true, is_premium: true }, { onConflict: "id" })
       .select().single();
     if (cCosmoErr) throw new Error("course cosmology: " + cCosmoErr.message);
     totalCourses++;
@@ -598,7 +602,7 @@ explanation: Heat Death is thermodynamic equilibrium at maximum entropy. All bla
 
     const { data: cGal, error: cGalErr } = await adminClient
       .from("courses")
-      .upsert({ id: "milky-way-beyond", subject_id: subGal.id, title: "The Milky Way & Beyond", slug: "milky-way-beyond", description: "Explore our galaxy and the vast universe of galaxies beyond it.", level_tag: ["beginner", "intermediate"], estimated_hours: 5, status: "published", difficulty: "beginner", order_index: 1, is_public: true }, { onConflict: "id" })
+      .upsert({ id: "milky-way-beyond", subject_id: subGal.id, title: "The Milky Way & Beyond", slug: "milky-way-beyond", description: "Explore our galaxy and the vast universe of galaxies beyond it.", level_tag: ["beginner", "intermediate"], estimated_hours: 5, status: "published", difficulty: "beginner", order_index: 1, is_public: true, is_premium: true }, { onConflict: "id" })
       .select().single();
     if (cGalErr) throw new Error("course galaxies: " + cGalErr.message);
     totalCourses++;
@@ -708,7 +712,7 @@ explanation: Accretion onto a SMBH converts gravitational potential energy to ra
 
     const { data: cObs, error: cObsErr } = await adminClient
       .from("courses")
-      .upsert({ id: "how-we-see-universe", subject_id: subObs.id, title: "How We See the Universe", slug: "how-we-see-universe", description: "Discover how telescopes, light, and detectors reveal the invisible cosmos.", level_tag: ["beginner"], estimated_hours: 4, status: "published", difficulty: "beginner", order_index: 1, is_public: true }, { onConflict: "id" })
+      .upsert({ id: "how-we-see-universe", subject_id: subObs.id, title: "How We See the Universe", slug: "how-we-see-universe", description: "Discover how telescopes, light, and detectors reveal the invisible cosmos.", level_tag: ["beginner"], estimated_hours: 4, status: "published", difficulty: "beginner", order_index: 1, is_public: true, is_premium: true }, { onConflict: "id" })
       .select().single();
     if (cObsErr) throw new Error("course obs: " + cObsErr.message);
     totalCourses++;
@@ -797,7 +801,7 @@ explanation: Two reasons: (1) Galaxies at z > 2 have their rest-frame optical li
 
     const { data: cLife, error: cLifeErr } = await adminClient
       .from("courses")
-      .upsert({ id: "life-in-universe", subject_id: subAstro.id, title: "Is Anyone Out There?", slug: "life-in-universe", description: "Explore extremophiles, the Drake Equation, and the search for extraterrestrial life.", level_tag: ["beginner", "intermediate"], estimated_hours: 5, status: "published", difficulty: "beginner", order_index: 1, is_public: true }, { onConflict: "id" })
+      .upsert({ id: "life-in-universe", subject_id: subAstro.id, title: "Is Anyone Out There?", slug: "life-in-universe", description: "Explore extremophiles, the Drake Equation, and the search for extraterrestrial life.", level_tag: ["beginner", "intermediate"], estimated_hours: 5, status: "published", difficulty: "beginner", order_index: 1, is_public: true, is_premium: true }, { onConflict: "id" })
       .select().single();
     if (cLifeErr) throw new Error("course life: " + cLifeErr.message);
     totalCourses++;
@@ -894,7 +898,7 @@ explanation: The 21-cm line is emitted by neutral hydrogen — the most abundant
     totalLessons += lifeLessons.length;
 
     return NextResponse.json({
-      message: `Expansion seeded! ${totalCourses} new courses · ${totalLessons} new lessons across 8 courses (4 Option A + 4 Option B new subjects).`,
+      message: `Expansion seeded! ${totalCourses} courses · ${totalLessons} lessons across 8 premium courses (A1–A4 + B1–B4, 4 new subjects added).`,
       breakdown: { totalNewCourses: totalCourses, totalNewLessons: totalLessons },
     });
 

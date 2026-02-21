@@ -89,7 +89,7 @@ export default function AdminPage() {
     if (!r2.ok) { setSeedStatus("error"); setSeedMsg(j2.error ?? "Phase 2 failed."); return; }
 
     setSeedStatus("done");
-    setSeedMsg(`All content seeded — 4 subjects · 12 courses · 53 lessons`);
+    setSeedMsg(`All content seeded — 8 subjects · 12 courses · 51 lessons`);
     load();
   }
 
@@ -253,11 +253,11 @@ export default function AdminPage() {
               Safe to run at any time; existing data is updated in place.
             </p>
             <div className="flex justify-center gap-6 text-xs text-[#484f58] mb-6">
-              <span>4 subjects</span>
+              <span>8 subjects</span>
               <span>·</span>
               <span>12 courses</span>
               <span>·</span>
-              <span>53 lessons</span>
+              <span>51 lessons</span>
             </div>
             {seedMsg && (
               <div className={`mb-5 p-3 rounded-lg text-sm ${seedStatus === "error" ? "bg-[#f85149]/10 border border-[#f85149]/30 text-[#f85149]" : "bg-[#3fb950]/10 border border-[#3fb950]/30 text-[#3fb950]"}`}>
