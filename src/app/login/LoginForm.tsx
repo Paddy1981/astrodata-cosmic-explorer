@@ -54,10 +54,13 @@ export default function LoginForm() {
     setLoading(true);
     setError("");
     const origin = window.location.origin;
-    const { error } = await supabase.auth.signInWithOAuth({
+    const redirectUrl = `${origin}/auth/callback?next=${redirectTo}`;
+    console.log("[Google OAuth] redirectTo:", redirectUrl);
+    const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: `${origin}/auth/callback?next=${redirectTo}` },
+      options: { redirectTo: redirectUrl },
     });
+    console.log("[Google OAuth] data:", data, "error:", error);
     if (error) {
       setError(error.message);
       setLoading(false);
