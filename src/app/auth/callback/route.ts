@@ -6,6 +6,15 @@ export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
   const next = searchParams.get("next") ?? "/learn";
+  const oauthError = searchParams.get("error");
+  const oauthErrorDesc = searchParams.get("error_description");
+
+  console.log("[auth/callback] Full URL:", request.url);
+  console.log("[auth/callback] Params:", { code: !!code, oauthError, oauthErrorDesc });
+
+  if (oauthError) {
+    return NextResponse.redirect(`${origin}/login?error=${encodeURIComponent(oauthErrorDesc || oauthError)}`);
+  }
 
   if (code) {
     const cookieStore = cookies();
@@ -34,6 +43,5 @@ export async function GET(request: Request) {
     return NextResponse.redirect(`${origin}/login?error=${encodeURIComponent(error.message)}`);
   }
 
-  console.error("[auth/callback] No code in request. URL:", request.url);
-  return NextResponse.redirect(`${origin}/login?error=no_code`);
+  return NextResponse.redirect(`${origin}/login?error=${encodeURIComponent("no_code: " + request.url)}`);
 }
