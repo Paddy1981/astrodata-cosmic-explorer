@@ -13,7 +13,8 @@ export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [magicEmail, setMagicEmail] = useState("");
-  const [error, setError] = useState("");
+  const urlError = searchParams.get("error");
+  const [error, setError] = useState(urlError ? decodeURIComponent(urlError) : "");
   const [magicSent, setMagicSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [tab, setTab] = useState<"password" | "magic">("password");
