@@ -111,6 +111,14 @@ For most of human history, we wondered: are we alone? Are there other planets ou
 
 In 1992, astronomers confirmed the first **exoplanets** — planets orbiting a star outside our own Solar System. Since then, we've discovered over **5,600** confirmed exoplanets, with thousands more candidates waiting to be verified.
 
+:::stat
+Over **5,600 confirmed exoplanets** as of 2024 — a number that grows monthly as TESS, JWST, and ground-based surveys continue operating. Scientists estimate the Milky Way harbours over **100 billion planets** in total.
+:::
+
+:::discovery
+On **6 October 1995**, Michel Mayor and Didier Queloz announced **51 Pegasi b** — the first exoplanet confirmed around a Sun-like star, a hot Jupiter completing a full orbit in just 4.23 days. They received the **2019 Nobel Prize in Physics** for this discovery, 24 years later.
+:::
+
 ## What Makes a Planet an "Exoplanet"?
 
 An **exoplanet** (short for *extra-solar planet*) is any planet that orbits a star other than our Sun. They come in incredible variety:
@@ -138,6 +146,10 @@ The nearest confirmed exoplanet, **Proxima Centauri b**, is 4.2 light-years away
 The Milky Way contains an estimated 100–400 billion stars. Most are believed to host at least one planet — meaning there could be **hundreds of billions of exoplanets** in our galaxy alone.
 :::
 
+:::infographic
+type: planet-size-scale
+:::
+
 :::quiz
 question: When were the first confirmed exoplanets discovered?
 - 1969 (Apollo era)
@@ -162,9 +174,17 @@ explanation: The first confirmed exoplanets were discovered in 1992 orbiting a p
 
 Exoplanets are far too distant to photograph directly with most telescopes. So how do we find them? Scientists use four main indirect detection methods — each exploiting a different physical effect that a planet has on its surroundings.
 
+:::infographic
+type: exoplanet-methods
+:::
+
 ## Method 1: Transit Photometry
 
 When a planet passes in front of its star, it blocks a tiny fraction of starlight — causing a small, regular dip in brightness. This technique is used by NASA's **Kepler** and **TESS** missions and accounts for roughly **75%** of all known exoplanet discoveries.
+
+:::stat
+**~75%** of confirmed exoplanets were discovered via transit photometry. NASA's Kepler mission alone confirmed **2,662 exoplanets** by monitoring 150,000 stars for 9 years. The ongoing TESS mission currently monitors about **200,000 stars** across the entire sky.
+:::
 
 :::interactive
 type: transit-method
@@ -276,6 +296,10 @@ correct: 1
 explanation: From the transit equation: ΔF = (Rₚ/R★)² = (0.5)² = 0.25 = 25%. The transit depth equals the **square** of the radius ratio — not the ratio itself. This is why even large planets block only a small fraction of starlight.
 :::
 
+:::stat
+NASA's Kepler space telescope achieved a photometric precision of **20 parts per million (20 ppm)** — equivalent to detecting the shadow of a housefly crossing a searchlight from a kilometre away. TESS achieves ~200 ppm; PLATO (launching ~2026) targets &lt;50 ppm.
+:::
+
 :::note
 NASA's Kepler space telescope could detect brightness changes as small as **20 parts per million** — equivalent to spotting a gnat flying in front of a searchlight from a kilometre away.
 :::
@@ -288,6 +312,10 @@ question: A star's brightness dips by 1% during a transit. If the star has a rad
 - 10 Jupiter radii
 correct: 1
 explanation: Rₚ/R★ = √(0.01) = 0.1, so Rₚ = 0.1 × 695,700 km = 69,570 km. Since 1 Jupiter radius ≈ 71,492 km, this planet is about 0.97 Jupiter radii — a classic hot Jupiter!
+:::
+
+:::warning
+**Don't confuse transit depth with radius ratio.** The transit depth ΔF = (Rₚ/R★)² is the *square* of the radius ratio — not the ratio itself. A 1% transit depth means Rₚ/R★ = √0.01 = 0.1, meaning the planet is one-tenth the star's radius. Always take the square root to recover the radius ratio.
 :::
 
 ## Now Try It — Real Data
@@ -322,6 +350,10 @@ A **light curve** is a graph of a star's brightness over time. When a planet tra
 3. **Flat bottom** — planet fully in front; maximum dimming
 4. **Egress** — planet moves away; brightness returns to baseline
 
+:::fact
+**KOI-17b** completes a full orbit in just **1.486 days** — its "year" lasts about 35 hours. This scorching hot Jupiter receives roughly 500× more stellar radiation than Earth receives from the Sun. Its surface (if it had one) would be permanently molten.
+:::
+
 :::note
 KOI-17b has a transit depth of **1.42%**, a transit period of **1.486 days**, and its host star has a radius of **1.05 solar radii**.
 :::
@@ -329,6 +361,10 @@ KOI-17b has a transit depth of **1.42%**, a transit period of **1.486 days**, an
 :::interactive
 type: planet-size
 description: Drag the slider to match KOI-17b's known radius ratio of ~0.119. Watch how the transit depth changes — you'll see it reach 1.42% at the correct value.
+:::
+
+:::warning
+**What a transit shows is the planet's shadow, not the planet itself.** Transit depth measures the planet's *area ratio* relative to the star's disk. It tells you radius — not mass, composition, or whether the planet has an atmosphere. A 1% dip from a giant planet and a 1% dip from a smaller planet transiting a smaller star look identical without additional data.
 :::
 
 ## Worked Calculation
@@ -398,9 +434,17 @@ You've learned how transits work. Now it's time to think like a real Kepler scie
 
 ## The Kepler Mission's Human Problem
 
+:::stat
+Kepler monitored **150,000 stars** simultaneously for 9 years, generating over **600 GB of data** — far more than any professional team could review manually. The resulting citizen-science program, Planet Hunters, had over **300,000 volunteers** classify light curves.
+:::
+
 When Kepler launched in 2009, it began monitoring **150,000 stars** simultaneously — producing more data than any team of astronomers could manually review. NASA turned to citizen scientists through the **Planet Hunters** program on Zooniverse, where volunteers examined light curves and flagged transit candidates.
 
 Several confirmed exoplanets were first spotted by citizen scientists, not professional astronomers.
+
+:::discovery
+**PH1b** (Kepler-64b), found in 2012 by citizen scientists Kian Jek and Robert Gagliano, orbits in a **four-star system** — the first confirmed planet in such a complex gravitational configuration. Professional astronomers had overlooked it. This discovery remains one of the most spectacular results of crowdsourced science.
+:::
 
 :::key
 The planet **PH1b** (now Kepler-64b) was discovered in 2012 by two amateur astronomers, Kian Jek and Robert Gagliano, through the Planet Hunters program. It orbits a four-star system — a discovery that surprised the scientific community.
@@ -464,6 +508,10 @@ type: planet-size
 description: Drag the slider to change the planet-to-star radius ratio. See how transit depth scales as the square of the ratio — a planet twice as large blocks four times more light.
 :::
 
+:::infographic
+type: planet-size-scale
+:::
+
 ## Planet Size Categories
 
 | Size Class | Radius Range | Notes |
@@ -473,6 +521,10 @@ description: Drag the slider to change the planet-to-star radius ratio. See how 
 | Mini-Neptune | 2–4 R⊕ | Most common type |
 | Neptune-class | 4–6 R⊕ | Ice giant |
 | Giant | 6–15 R⊕ | Gas giant |
+
+:::stat
+Kepler planet frequency per 100 Sun-like stars: **Mini-Neptunes ~30** · **Super-Earths ~26** · **Earth-like ~22** · **Neptune-class ~3** · **Hot Jupiters ~1**. The 1.5–2 R⊕ "Fulton gap" is one of the sharpest statistical features in the dataset.
+:::
 
 ## The Fulton Gap
 
@@ -512,6 +564,10 @@ explanation: The transit depth represents the fraction of the star's visible dis
 
 Once we know a planet's orbital period from repeated transits, Kepler's Third Law lets us calculate its distance from the star — no parallax measurement needed.
 
+:::discovery
+Johannes Kepler published his **Third Law in 1619** in *Harmonices Mundi* ("The Harmony of the World") — 58 years before Newton derived it mathematically. Kepler found it purely empirically from **Tycho Brahe's** 20+ years of meticulous planetary observations, without any physical theory to explain why it worked.
+:::
+
 ## The Law
 
 :::formula
@@ -523,6 +579,10 @@ The square of the orbital period equals the cube of the semi-major axis. In SI u
 :::interactive
 type: orbital-mechanics
 description: Watch a planet orbit its star on an ellipse. The shaded area sector shows equal areas swept in equal times — Kepler's Second Law. Change the eccentricity to see how the orbit shape affects speed and period.
+:::
+
+:::stat
+Mercury orbits the Sun at **47.4 km/s** — fast enough to cross the continental US in under 2 minutes. Neptune crawls at just **5.4 km/s**, 9× slower. Kepler's Third Law: their period ratio (88 days vs 165 years)² equals their distance ratio cubed, perfectly predicting this speed difference.
 :::
 
 ## Equal Areas in Equal Times
@@ -599,8 +659,16 @@ description: Select a star type and drag the planet to different orbital distanc
 | G dwarf/Sun (5778K) | 1.0 L☉ | 0.95 AU | 1.67 AU |
 | F dwarf (7000K) | 3.2 L☉ | 1.70 AU | 3.03 AU |
 
+:::fact
+**Proxima Centauri b** — our nearest confirmed exoplanet at just 4.2 light-years — orbits within its star's habitable zone with a period of **11.2 days**. However, Proxima Centauri is an active flare star that regularly unleashes UV bursts powerful enough to strip unshielded atmospheres, raising serious doubts about habitability.
+:::
+
 :::key
 **Are M dwarf habitable zones truly habitable?** Their close-in HZs mean planets are likely tidally locked — one side always facing the star. They also experience intense stellar flares early in their lives. Proxima Centauri b (the nearest exoplanet) sits in the HZ of an M dwarf and faces all these challenges.
+:::
+
+:::warning
+**The habitable zone does not guarantee life or even habitability.** A planet in the HZ could still be barren if it has no atmosphere (like Mars), a runaway greenhouse effect (early Venus), no liquid water due to wrong composition, or no magnetic field to deflect stellar radiation. "Habitable zone" only means liquid water is *physically possible* on the surface.
 :::
 
 :::quiz
@@ -654,9 +722,17 @@ description: Hover each planet class to see its physical properties — radius, 
 | Neptune (4–6 R⊕) | ~3% | — |
 | Giant (>6 R⊕) | ~1% | Hot Jupiters + cold giants |
 
+:::stat
+Planet frequency per 100 stars (Kepler): **Mini-Neptunes ~30** · **Super-Earths ~26** · **Earth-like ~22** · **Neptune-class ~3** · **Hot Jupiters ~1**. Our Solar System has zero mini-Neptunes — the most common planet type in the galaxy.
+:::
+
 ## The Radius Gap
 
 Data from Kepler reveal a scarcity of planets with radii between 1.5–2 R⊕. This "Fulton gap" is thought to reflect atmospheric escape: sub-Neptune planets at the boundary are stripped of their H/He envelopes by stellar UV radiation, transitioning from mini-Neptunes to bare super-Earths.
+
+:::fact
+Our Solar System's architecture — small rocky planets close-in, giant planets far out — appears to be **statistically unusual**. Most detected systems have large planets at short orbital periods. Jupiter's early "Grand Tack" migration inward and back may have been key to Earth's formation and the Solar System's unusual layout.
+:::
 
 :::key
 The lack of planets like **Uranus and Neptune** at short orbital periods in the galaxy is intriguing. Our Solar System's architecture — with small rocky planets close-in and gas giants far out — may be somewhat unusual. Most detected systems have large planets close to their stars.
@@ -766,12 +842,24 @@ type: star-formation
 description: Watch a molecular cloud collapse into a main sequence star. Each stage is labelled — from the initial Jeans instability through protostellar contraction and bipolar jets to hydrogen fusion ignition.
 :::
 
+:::infographic
+type: stellar-lifecycle
+:::
+
+:::fact
+Molecular clouds reach temperatures as low as **10 Kelvin (−263°C)** — just 10 degrees above absolute zero, among the coldest natural objects in the universe. Yet inside these frigid clouds, gravity quietly assembles the seeds of stars that will eventually burn at millions of degrees.
+:::
+
 ## Stages of Star Formation
 
 1. **Molecular Cloud** — Cold (10–30 K), dense, composed mainly of H₂ and dust
 2. **Protostellar Core** — Gravity wins; cloud collapses; core heats via Kelvin-Helmholtz contraction
 3. **T Tauri Phase** — A young stellar object surrounded by a protoplanetary disk; bipolar jets clear material
 4. **Zero-Age Main Sequence** — Core temperature reaches ~10 million K; hydrogen fusion ignites; hydrostatic equilibrium
+
+:::stat
+The Sun is **4.6 billion years old** with roughly **5 billion years** remaining on the main sequence. Its total main-sequence lifetime is ~10 billion years. For comparison, the universe itself is 13.8 billion years old — meaning the Sun formed when the cosmos was already 9 billion years old.
+:::
 
 :::key
 The Sun formed **4.6 billion years ago** in a molecular cloud that also gave birth to the rest of our Solar System. The disk surrounding the infant Sun eventually became the planets, moons, and asteroids we know today.
@@ -811,11 +899,19 @@ explanation: The Jeans instability describes the critical condition for gravitat
 
 In the early 20th century, astronomers Ejnar Hertzsprung and Henry Norris Russell independently discovered that most stars fall along a diagonal band when plotted by luminosity vs temperature. This **H-R diagram** remains the single most important tool in stellar astrophysics.
 
+:::discovery
+**Ejnar Hertzsprung** (1911) and **Henry Norris Russell** (1913) independently discovered what we now call the H-R diagram — without knowing about each other's work. Their finding that most stars cluster on a diagonal band implied that stars weren't random objects but followed predictable physical laws, laying the foundation for modern stellar astrophysics.
+:::
+
 ## Reading the H-R Diagram
 
 :::interactive
 type: hr-diagram
 description: Click any star to inspect its properties. The main sequence runs from hot, luminous O-type stars (top-left) to cool, dim M dwarfs (bottom-right). Giants and white dwarfs occupy distinct off-sequence regions.
+:::
+
+:::stat
+**~90%** of all visible stars are on the main sequence at any given moment. Red dwarfs (M type) account for **~75%** of all stars in the Milky Way but are too dim to see with the naked eye. Only about **0.003%** of stars are massive O-type blue giants.
 :::
 
 ## The Main Sequence
@@ -833,6 +929,10 @@ The diagonal band from hot-luminous to cool-dim is the **main sequence** — sta
 **L ∝ M^4 (approximately)**
 
 More massive stars are exponentially more luminous — and burn through their fuel far faster. A star 10× the Sun's mass is ~10,000× more luminous but lives ~100× shorter.
+:::
+
+:::warning
+**The main sequence is not a path a star travels along.** Stars don't evolve from O-type down to M-type as they age. A star is born at a fixed point on the main sequence determined by its mass and *stays near that point* for most of its life. Only when it exhausts its core hydrogen does it leave the main sequence — moving to the giant branch.
 :::
 
 :::quiz
@@ -869,6 +969,10 @@ explanation: Main sequence stars are in a stable phase of hydrogen fusion in the
 
 A stellar spectrum is a fingerprint of the star — encoding its temperature, chemical composition, and even its radial velocity. By dispersing starlight through a prism or diffraction grating, astronomers extract an enormous amount of information from a single observation.
 
+:::fact
+**Helium was discovered in the Sun before it was found on Earth.** During the 1868 solar eclipse, Norman Lockyer observed an unknown yellow spectral line in the Sun's atmosphere and named it "helium" after *Helios*, the Greek sun god. Helium wasn't isolated on Earth until **1895** — 27 years later.
+:::
+
 ## Blackbody Radiation and Wien's Law
 
 Every hot, dense object emits a continuous spectrum of light. The peak wavelength of this emission depends on temperature:
@@ -884,6 +988,10 @@ type: stellar-spectra
 description: Drag the temperature slider to see the blackbody spectrum shift from cool red stars to hot blue-white stars. The dark vertical lines are absorption features — atoms in the stellar atmosphere absorb specific wavelengths.
 :::
 
+:::stat
+The Sun's peak emission wavelength is **~502 nm** (green light) — yet the Sun appears white/yellow because it emits strongly across the entire visible spectrum. Our eyes perceive this broad mix as white-yellow, not pure green. Wien's Law: λ_max = 2,898,000 / 5778 K ≈ 502 nm.
+:::
+
 ## Absorption Lines — The Stellar Fingerprint
 
 As light passes through the cooler outer layers of a star's atmosphere, specific atoms and ions absorb light at characteristic wavelengths, creating dark absorption lines. The pattern of lines identifies the elements present:
@@ -892,6 +1000,10 @@ As light passes through the cooler outer layers of a star's atmosphere, specific
 - **Calcium H and K** — strongest in G and K stars; the Sun's spectrum shows these prominently
 - **Sodium D doublet** — present in cooler stars
 - **Titanium oxide** — only visible in the coolest M-type stars
+
+:::discovery
+In 1925, **Cecilia Payne-Gaposchkin** discovered that stars are overwhelmingly composed of hydrogen and helium — overturning the prevailing belief that stars had Earth-like composition. Her PhD thesis is often called "the most brilliant in the history of astronomy." Her supervisor initially pressured her to retract the conclusion; he later confirmed and published it himself without adequately crediting her. She eventually became the first woman to chair a department at Harvard.
+:::
 
 :::key
 The spectral classification system **O-B-A-F-G-K-M** orders stars from hottest to coolest. A useful mnemonic: "Oh Be A Fine Girl/Guy, Kiss Me." The Sun is a G2 star — middle temperature, middle age.
@@ -931,6 +1043,10 @@ explanation: Quantum mechanics dictates that electrons in atoms can only occupy 
 
 Every main sequence star eventually exhausts the hydrogen in its core. What happens next depends entirely on the star's mass — but in every case, the result is spectacular.
 
+:::infographic
+type: stellar-lifecycle
+:::
+
 ## Low-Mass Stars: Red Giants
 
 When a Sun-like star runs out of core hydrogen, gravity wins and the core contracts. The increasing temperature ignites hydrogen shell burning around the inert helium core, and the star's outer envelope expands enormously — a **red giant**.
@@ -943,6 +1059,10 @@ description: Watch a massive star evolve from the main sequence through red gian
 ## High-Mass Stars: Supernovae
 
 Stars more massive than ~8 M☉ undergo a far more violent death. Successive nuclear burning stages (He, C, O, Si) build up concentric shells around an iron core. Iron fusion does not release energy — so when the iron core exceeds ~1.4 M☉ (the Chandrasekhar limit), it collapses catastrophically in less than a second.
+
+:::stat
+Core collapse happens in **≈ 0.1 seconds** — a stellar core ~1,000 km across implodes to a neutron star just 10–20 km wide at ~25% the speed of light. The gravitational energy released (~3×10⁴⁶ J) exceeds the Sun's total electromagnetic output over its **entire 10-billion-year lifetime**.
+:::
 
 :::formula
 **Core collapse timescale ≈ 0.1 seconds**
@@ -1005,9 +1125,21 @@ When a low-mass star (~0.8–8 M☉) ends its life as a red giant or asymptotic 
 A teaspoon of white dwarf material would weigh ~5 tonnes on Earth.
 :::
 
+:::stat
+Density extremes: A white dwarf packs **~1 M☉** into an Earth-sized volume → **~10⁶ g/cm³** (a teaspoon weighs 5 tonnes). A neutron star squeezes **~1.4 M☉** into a 10 km sphere → **~10¹⁴ g/cm³** (a sugar cube weighs 700 million tonnes).
+:::
+
 ## The Chandrasekhar Limit
 
+:::discovery
+**Subrahmanyan Chandrasekhar** calculated the white dwarf mass limit at age **19** while sailing from India to England in 1930 — with pencil and paper, on a steamship. The astrophysics establishment initially rejected his result as physically impossible. He received the **Nobel Prize in Physics in 1983**, 53 years after the calculation.
+:::
+
 White dwarfs are supported against gravity by **electron degeneracy pressure** — a quantum mechanical effect. There is an upper limit to how much mass this can support: the **Chandrasekhar limit** of ~1.4 M☉. If a white dwarf exceeds this (e.g., by accreting mass from a companion), it explodes as a **Type Ia supernova** — used as a "standard candle" in cosmology.
+
+:::warning
+**White dwarfs are not burning.** They have no ongoing nuclear fusion. Their glow is purely residual thermal emission from billions of years of stored heat, slowly radiating into space. A white dwarf will continue cooling for **trillions of years** — far longer than the current age of the universe. No "cold white dwarf" (black dwarf) has ever been observed.
+:::
 
 ## Neutron Stars
 
@@ -1123,6 +1255,10 @@ type: solar-system
 description: The eight planets orbit at speeds proportional to their real orbital periods. Hover any planet for data. Notice how dramatically slower the outer planets move compared to Mercury — Kepler's Third Law in action.
 :::
 
+:::infographic
+type: solar-system-scale
+:::
+
 ## The Inner Planets (Terrestrial)
 
 | Planet | Distance | Year Length | Notable Feature |
@@ -1141,6 +1277,10 @@ description: The eight planets orbit at speeds proportional to their real orbita
 | Uranus | 19.2 AU | 84 yr | Rotates on its side (98° axial tilt) |
 | Neptune | 30.1 AU | 165 yr | Fastest winds in Solar System (~2100 km/h) |
 
+:::stat
+**Jupiter alone** contains more than **twice the combined mass of all other planets** — its mass is 318 Earths. Jupiter's gravity sculpted the asteroid belt, deflected early comets, and may have protected Earth from heavy bombardment during the Solar System's youth.
+:::
+
 :::key
 The division between inner rocky planets and outer gas giants is not random. The **frost line** (or snow line) at ~2.7 AU was a critical boundary during Solar System formation — beyond it, water ice could condense, enabling the accumulation of much larger planetary cores that then accreted vast gas envelopes.
 :::
@@ -1153,6 +1293,10 @@ question: Why does Saturn have a lower average density than water (0.69 g/cm³)?
 - Saturn's measurement is inaccurate
 correct: 1
 explanation: Saturn's bulk composition is ~96% hydrogen and ~3% helium by mass — the same materials that make up the Sun. The very light hydrogen and helium gas, even under enormous gravitational compression, result in an average density of just 0.69 g/cm³. Saturn would theoretically float in a sufficiently large ocean.
+:::
+
+:::fact
+**Neptune was discovered mathematically before it was seen.** In 1845–1846, Le Verrier and Adams independently predicted Neptune's position from perturbations in Uranus's orbit. Astronomer Johann Galle pointed his telescope to Le Verrier's coordinates on **23 September 1846** — and found Neptune within 1° of the predicted spot. It remains one of the greatest triumphs of mathematical physics.
 :::
 
 :::quiz
@@ -1179,6 +1323,10 @@ explanation: During Solar System formation, the frost line (at ~2.7 AU from the 
 
 Planetary orbits are not perfect circles but ellipses — a discovery made by Johannes Kepler in the early 17th century, decades before Newton explained *why* using his law of universal gravitation.
 
+:::discovery
+Johannes Kepler derived his laws from **Tycho Brahe's** 20+ years of meticulous naked-eye planetary observations — the most accurate pre-telescope data ever assembled, accurate to 1/4 arcminute. When Brahe died in 1601, he entrusted his data to his assistant Kepler, who spent the next decade uncovering the mathematical laws hidden within.
+:::
+
 ## Kepler's Three Laws
 
 **First Law:** Each planet orbits the Sun in an ellipse, with the Sun at one focus.
@@ -1195,6 +1343,14 @@ Period² (in years) = semi-major axis³ (in AU).
 :::interactive
 type: orbital-mechanics
 description: An elliptical orbit with adjustable eccentricity. The blue shaded sector shows the area swept in a fixed time — it stays constant (Kepler's Second Law). Watch the planet accelerate near the Sun and slow down at aphelion.
+:::
+
+:::stat
+Mercury orbits at **47.4 km/s** — fast enough to cross the US in under 2 minutes. Neptune crawls at **5.4 km/s**, 9× slower. Their speed ratio perfectly follows Kepler's Third Law: orbital speed ∝ 1/√a.
+:::
+
+:::warning
+**The Sun is not at the centre of Earth's orbit.** The Solar System actually orbits the **barycentre** — the common centre of mass. For Earth this is well inside the Sun, but the Sun-Jupiter barycentre is slightly outside the Sun's surface. This Solar wobble — caused by all planets but dominated by Jupiter — is exactly what radial velocity exoplanet surveys measure in other stars.
 :::
 
 ## Why Ellipses?
@@ -1241,12 +1397,24 @@ Mercury is the innermost and smallest planet (radius 2,440 km — barely larger 
 
 Mercury has a surprisingly large iron core (85% of its radius), thought to be the result of a giant impact early in Solar System history that stripped away much of its rocky mantle.
 
+:::stat
+Surface condition comparison: **Venus** 465°C / 92 atm pressure / H₂SO₄ clouds · **Earth** 15°C avg / 1 atm / 71% liquid water · **Mars** −60°C avg / 0.006 atm / CO₂ ice caps. All three planets lie within 0.8 AU of each other yet diverged into radically different worlds.
+:::
+
 ## Venus: The Twin That Went Wrong
 
 Venus is almost Earth's twin in size (radius 6,051 km vs Earth's 6,371 km) but is completely hostile to life. A thick atmosphere of CO₂ with clouds of sulfuric acid creates a runaway greenhouse effect — surface temperature 465°C, hotter than Mercury.
 
+:::discovery
+On **15 December 1970**, the Soviet **Venera 7** became the first spacecraft to successfully transmit data from another planet's surface — surviving Venus's crushing pressure for 23 minutes before going silent. Measured surface temperature: **475°C**. Engineers had to design it like a deep-sea submarine to withstand the pressure.
+:::
+
 :::key
 **Atmospheric pressure on Venus = 92 × Earth's surface pressure** — equivalent to being 900 metres underwater. Early Soviet Venera landers survived only ~23–127 minutes before being crushed and corroded.
+:::
+
+:::fact
+**A day on Venus is longer than a year on Venus.** Venus rotates so slowly (243 Earth days per rotation) that its sidereal day exceeds its orbital period (225 Earth days). It also rotates *retrograde* — the Sun would rise in the west and set in the east if you could see it through the permanent cloud cover.
 :::
 
 ## Earth: The Goldilocks Planet
@@ -1291,6 +1459,10 @@ explanation: Mars orbiters have imaged ancient river valley networks and delta d
 
 The Solar System is not just eight planets. It contains billions of smaller bodies — the leftovers of planetary formation — that tell us about the early Solar System's history.
 
+:::stat
+The asteroid belt contains an estimated **1.1–1.9 million** asteroids larger than 1 km in diameter, yet their **total mass is only ~4% of Earth's Moon** — spread thinly across a doughnut-shaped region from 2.2–3.2 AU. Despite sci-fi portrayals, a spacecraft flying through it has a tiny statistical chance of encountering any asteroid.
+:::
+
 ## Asteroids
 
 **Asteroids** are rocky and metallic bodies, predominantly found in the **Main Asteroid Belt** between Mars and Jupiter (2.2–3.2 AU). Jupiter's gravity stirred this region so violently that the material never coalesced into a planet.
@@ -1299,6 +1471,10 @@ The Solar System is not just eight planets. It contains billions of smaller bodi
 - ~1 million asteroids >1 km diameter
 - Composition ranges from primitive carbonaceous (C-type) to metallic iron-nickel (M-type)
 - **Ceres** is the largest asteroid (diameter 940 km) and the only dwarf planet in the inner Solar System
+
+:::fact
+**Comet Hale-Bopp** (1997) was visible to the naked eye for an extraordinary **18 months** — longer than any comet in recorded history. Its nucleus, estimated at **60 km across**, is one of the largest ever measured. It won't return for approximately 2,500 years.
+:::
 
 ## Comets
 
@@ -1412,6 +1588,10 @@ explanation: A comet has two tails: an ion tail pushed straight away from the Su
 
 A **black hole** is a region of spacetime where gravity is so intense that nothing — not even light — can escape. It is the ultimate prediction of Einstein's general theory of relativity.
 
+:::infographic
+type: black-hole-anatomy
+:::
+
 ## The Schwarzschild Radius
 
 Every mass has a Schwarzschild radius — the critical size to which that mass would need to be compressed for it to become a black hole:
@@ -1440,6 +1620,14 @@ The **event horizon** is the boundary of the black hole — the point of no retu
 ## The Photon Sphere
 
 At radius 1.5 r_s, light can orbit a black hole in a circular path — the **photon sphere**. This unstable orbit produces the bright ring visible in the Event Horizon Telescope (EHT) images of M87* and Sagittarius A*.
+
+:::stat
+M87* subtends just **42 microarcseconds** — equivalent to photographing an orange on the surface of the Moon from Earth. The EHT achieved this by combining radio telescopes spanning the entire diameter of Earth, effectively creating a planet-sized telescope.
+:::
+
+:::discovery
+The **Event Horizon Telescope** image of M87*, published **10 April 2019**, required over **5 petabytes of data** flown by aeroplane from the South Pole (the internet link is too slow). Over **200 scientists in 20 countries** collaborated to produce the image, directly confirming a key prediction of general relativity.
+:::
 
 :::key
 In 2019, the Event Horizon Telescope Collaboration released the first-ever image of a black hole — M87*, 6.5 billion solar masses, 55 million light-years away. In 2022, they imaged **Sagittarius A*** — the 4-million-solar-mass black hole at the centre of our own Milky Way.
@@ -1488,6 +1676,10 @@ type: schwarzschild
 description: The Schwarzschild geometry — light bending, photon ring, and the shadow of the event horizon. Rays that pass closer than the photon sphere are captured; distant rays are lensed into arcs.
 :::
 
+:::stat
+The **LIGO-Virgo-KAGRA** gravitational wave catalog (GWTC-3, 2021) contains **90 confident detections** — including 83 binary black hole mergers, 2 binary neutron star mergers, and 2 neutron star-black hole events. Stellar black hole masses range from ~3 to ~100 M☉ in the catalog.
+:::
+
 ## Observational Evidence
 
 Since black holes emit no light, we detect them through their effects on surroundings:
@@ -1498,12 +1690,20 @@ Since black holes emit no light, we detect them through their effects on surroun
 
 3. **Gravitational waves** — Two merging black holes emit ripples in spacetime detectable by LIGO/Virgo (first detection: GW150914, 2015).
 
+:::fact
+In 1974, **Stephen Hawking** bet **Kip Thorne** that Cygnus X-1 was *not* a black hole — as "insurance" in case his own theoretical work on black holes was wrong. Hawking conceded in 1990 when the evidence became overwhelming. The prize: Thorne received a year's subscription to *Penthouse*; Hawking got four years of *Private Eye*.
+:::
+
 ## Mass Distribution
 
 Stellar black holes range from ~3 M☉ to ~100 M☉. The LIGO–Virgo–KAGRA catalog has revealed dozens of binary black hole mergers, with component masses typically 5–60 M☉.
 
 :::note
 In 2019, a black hole of 70 M☉ was reported from radial velocity measurements of a companion star in the Milky Way — surprisingly large for a stellar black hole and suggesting a possible observational error or unusual formation pathway.
+:::
+
+:::warning
+**Black holes do not "suck" matter in.** At distances beyond their event horizon, a black hole's gravity is identical to any other object of the same mass. If the Sun were magically replaced by a black hole of equal mass, Earth's orbit would be completely unchanged. Black holes only trap matter that comes close enough — inside the event horizon — and that requires actively falling toward them.
 :::
 
 :::quiz
@@ -1554,6 +1754,10 @@ As gas spirals inward, gravitational potential energy is converted to heat throu
 About 10% of the accreted mass-energy is converted to radiation — 10–100× more efficient than nuclear fusion!
 :::
 
+:::stat
+Accretion disks are **~14× more energy-efficient than nuclear fusion**: nuclear H→He fusion converts ~0.7% of mass to energy; a non-rotating black hole's accretion disk converts ~6%, and a maximally spinning (Kerr) black hole up to ~42%. This extraordinary efficiency explains why quasars outshine entire galaxies.
+:::
+
 ## The Innermost Stable Circular Orbit (ISCO)
 
 General relativity predicts that stable circular orbits only exist above a minimum radius called the **ISCO**:
@@ -1561,6 +1765,10 @@ General relativity predicts that stable circular orbits only exist above a minim
 - **Maximally rotating (Kerr) BH**: ISCO can reach as close as 0.5 r_s
 
 Inside the ISCO, infalling matter spirals rapidly into the event horizon. The ISCO's radius determines the maximum accretion efficiency.
+
+:::fact
+The brightest known **quasar** (J0529-4351, identified in 2024) releases energy equivalent to **~500 trillion suns** and consumes roughly **370 solar masses per year** to power this output. The most luminous quasars outshine their host galaxies (each containing ~100 billion stars) by a factor of 1,000 or more.
+:::
 
 ## Relativistic Jets
 
@@ -1604,6 +1812,10 @@ In 2015, the LIGO detectors made one of the greatest discoveries in the history 
 
 Einstein's general relativity predicts that accelerating massive objects distort spacetime and send ripples outward at the speed of light. These gravitational waves stretch and squeeze space alternately in two perpendicular directions (the h+ and h× polarisations).
 
+:::stat
+LIGO measures displacements of **~10⁻¹⁸ metres** — one-thousandth the diameter of a proton. To achieve this, it uses 4 km laser arms bounced ~280 times, 40 kg mirrors suspended on 8-stage seismic isolation, and quantum noise mitigation. It is the **most sensitive measuring instrument ever built by humanity**.
+:::
+
 :::formula
 **h = ΔL/L ≈ 10⁻²¹**
 The strain h measures the fractional change in length. For GW150914, a 4 km LIGO arm changed by ~10⁻¹⁸ m — a thousandth the width of a proton.
@@ -1612,6 +1824,10 @@ The strain h measures the fractional change in length. For GW150914, a 4 km LIGO
 :::interactive
 type: grav-waves
 description: Two merging black holes produce a chirp signal — rising in frequency and amplitude as the inspiral accelerates. The spacetime grid shows the h+ strain: space stretching in one direction while compressing in the perpendicular direction.
+:::
+
+:::discovery
+**GW150914** was detected on **14 September 2015** — exactly 100 years after Einstein published the field equations of general relativity in 1915. The signal lasted just 0.2 seconds but confirmed: binary black holes exist, they merge, and gravitational waves travel at the speed of light. The peak power radiated at merger: **~3.6 × 10⁴⁹ watts** — more than the light output of all stars in the observable universe combined, for that fraction of a second.
 :::
 
 ## The Binary Black Hole Inspiral
@@ -1627,6 +1843,10 @@ This produces the characteristic **chirp** signal detected by LIGO — a wavefor
 | GW150914 | 36 + 29 M☉ | 1.3 billion ly | Sep 2015 |
 | GW170817 | NS + NS | 130 million ly | Aug 2017 |
 | GW190814 | 23 + 2.6 M☉ | 800 million ly | Aug 2019 |
+
+:::fact
+The neutron star merger **GW170817** produced detectable quantities of **gold, platinum, and uranium** — an estimated ~10 Earth masses of gold in the kilonova afterglow. This confirmed that most of the gold on Earth, and in your jewellery, was forged in neutron star collisions billions of years ago.
+:::
 
 :::key
 The neutron star merger GW170817 was simultaneously detected as a **gamma-ray burst**, marking the dawn of **multi-messenger astronomy** — observing the universe through both gravitational waves and electromagnetic light. This single event confirmed that neutron star mergers produce heavy elements like gold and platinum.
@@ -1666,6 +1886,10 @@ explanation: The gravitational wave frequency equals twice the orbital frequency
 
 At the centre of every large galaxy lurks a **supermassive black hole** (SMBH) — objects with masses ranging from millions to tens of billions of solar masses. The one at the centre of our Milky Way, **Sagittarius A***, has a mass of 4 million M☉.
 
+:::infographic
+type: black-hole-anatomy
+:::
+
 ## How Large Are They?
 
 | Object | Mass | Schwarzschild Radius | Location |
@@ -1676,6 +1900,10 @@ At the centre of every large galaxy lurks a **supermassive black hole** (SMBH) �
 
 M87*'s Schwarzschild radius is larger than our entire Solar System.
 
+:::stat
+**TON 618** — one of the most massive known black holes at **66 billion M☉** — has a Schwarzschild radius of ~1,300 AU. Neptune's orbit is at 30 AU; TON 618's event horizon would extend **43× farther than Neptune's orbit** from our Sun. If placed at the Sun's position, its event horizon would engulf our entire Solar System many times over.
+:::
+
 ## Evidence for Sagittarius A*
 
 For decades, astronomers tracked stars near the Galactic Centre completing elliptical orbits around an invisible point source. The star S2 has an orbital period of only 16 years and a periapsis distance of just 120 AU from Sgr A*. Newton's laws give a central mass of 4 million M☉ — too compact to be anything other than a black hole.
@@ -1685,6 +1913,10 @@ In 2022, the Event Horizon Telescope published the first image of Sagittarius A*
 ## Quasars: Supermassive Black Holes at Work
 
 When a SMBH actively accretes matter at a high rate, it becomes a **quasar** (quasi-stellar object) — the most luminous persistent objects in the universe. The most powerful quasars outshine their host galaxies by factors of 1,000 or more.
+
+:::discovery
+**Andrea Ghez** (UCLA) and **Reinhard Genzel** (Max Planck Institute) shared the **2020 Nobel Prize in Physics** for 30 years of tracking stars near the Galactic Centre. Their teams independently measured the orbits of dozens of stars around Sagittarius A*, proving beyond doubt that a 4-million-solar-mass black hole exists there — making Sgr A* the most carefully studied black hole in history.
+:::
 
 :::key
 **Every large galaxy has a SMBH**, and the SMBH mass correlates with the properties of the galaxy's central bulge (the M-sigma relation). This suggests that SMBHs and their host galaxies co-evolved — growing together over cosmic time through a feedback process not yet fully understood.

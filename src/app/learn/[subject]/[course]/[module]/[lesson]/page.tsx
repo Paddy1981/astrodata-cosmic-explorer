@@ -215,6 +215,13 @@ function parseMdxSegments(mdx: string): Segment[] {
       }
       if (descLines.length > 0) config.description = descLines.join(" ").trim();
       segments.push({ type: "interactive", interactiveType: config.type ?? "unknown", config });
+    } else if (blockType === "infographic") {
+      const config: Record<string, string> = {};
+      for (const line of blockContent.split("\n")) {
+        const m = line.match(/^([\w-]+)\s*:\s*(.+)$/);
+        if (m) config[m[1]] = m[2].trim();
+      }
+      segments.push({ type: "infographic", infographicType: config.type ?? "unknown" });
     } else {
       segments.push({
         type: "callout",

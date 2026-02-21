@@ -25,6 +25,13 @@ const BlackHoleLensing              = dynamic(() => import("./BlackHoleLensing")
 const AccretionDiskAnimation        = dynamic(() => import("./AccretionDiskAnimation"),        { ssr: false });
 const GravWaveAnimation             = dynamic(() => import("./GravWaveAnimation"),             { ssr: false });
 
+// ── Static infographic components ─────────────────────────────────────────────
+const PlanetSizeScale         = dynamic(() => import("./PlanetSizeScale"),         { ssr: false });
+const ExoplanetMethodsChart   = dynamic(() => import("./ExoplanetMethodsChart"),   { ssr: false });
+const StellarLifecycle        = dynamic(() => import("./StellarLifecycle"),        { ssr: false });
+const SolarSystemScale        = dynamic(() => import("./SolarSystemScale"),        { ssr: false });
+const BlackHoleAnatomy        = dynamic(() => import("./BlackHoleAnatomy"),        { ssr: false });
+
 // ── Expansion animation components ────────────────────────────────────────────
 const TransmissionSpectraAnimation  = dynamic(() => import("./TransmissionSpectraAnimation"),  { ssr: false });
 const BiosignatureSpectraAnimation  = dynamic(() => import("./BiosignatureSpectraAnimation"),  { ssr: false });
@@ -46,7 +53,8 @@ export type Segment =
   | { type: "html"; htmlContent: string }
   | { type: "callout"; calloutType: string; htmlContent: string }
   | { type: "quiz"; question: string; options: string[]; correct: number; explanation: string }
-  | { type: "interactive"; interactiveType: string; config: Record<string, string> };
+  | { type: "interactive"; interactiveType: string; config: Record<string, string> }
+  | { type: "infographic"; infographicType: string };
 
 interface Props {
   segments: Segment[];
@@ -59,10 +67,14 @@ interface Props {
 }
 
 const CALLOUT_META: Record<string, { icon: string; bg: string; border: string; label: string; lc: string }> = {
-  note:     { icon: "💡", bg: "bg-[#0d1f33]", border: "border-[#58a6ff]/30", label: "Note",        lc: "text-[#58a6ff]" },
-  key:      { icon: "🔑", bg: "bg-[#1f1200]", border: "border-[#f0883e]/30", label: "Key Insight", lc: "text-[#f0883e]" },
-  formula:  { icon: "∑",  bg: "bg-[#150d2a]", border: "border-[#bc8cff]/30", label: "Formula",     lc: "text-[#bc8cff]" },
-  exercise: { icon: "🎯", bg: "bg-[#071a07]", border: "border-[#3fb950]/30", label: "Try It",      lc: "text-[#3fb950]" },
+  note:      { icon: "💡", bg: "bg-[#0d1f33]",  border: "border-[#58a6ff]/30", label: "Note",                 lc: "text-[#58a6ff]" },
+  key:       { icon: "🔑", bg: "bg-[#1f1200]",  border: "border-[#f0883e]/30", label: "Key Insight",          lc: "text-[#f0883e]" },
+  formula:   { icon: "∑",  bg: "bg-[#150d2a]",  border: "border-[#bc8cff]/30", label: "Formula",              lc: "text-[#bc8cff]" },
+  exercise:  { icon: "🎯", bg: "bg-[#071a07]",  border: "border-[#3fb950]/30", label: "Try It",               lc: "text-[#3fb950]" },
+  stat:      { icon: "📊", bg: "bg-[#1a1500]",  border: "border-[#f7cc4a]/30", label: "Key Statistic",        lc: "text-[#f7cc4a]" },
+  fact:      { icon: "🌟", bg: "bg-[#061a10]",  border: "border-[#39d353]/30", label: "Did You Know",         lc: "text-[#39d353]" },
+  discovery: { icon: "🔭", bg: "bg-[#1a1000]",  border: "border-[#f0883e]/40", label: "Discovery",            lc: "text-[#f0883e]" },
+  warning:   { icon: "⚠️", bg: "bg-[#1a0505]",  border: "border-[#f85149]/30", label: "Common Misconception", lc: "text-[#f85149]" },
 };
 
 export default function LessonContent({
@@ -111,6 +123,7 @@ export default function LessonContent({
           return (
             <div
               key={i}
+              className="lesson-prose"
               dangerouslySetInnerHTML={{ __html: seg.htmlContent }}
             />
           );
@@ -327,6 +340,16 @@ export default function LessonContent({
           if (seg.interactiveType === "drake-equation") {
             return <DrakeEquationInteractive key={i} description={seg.config.description} />;
           }
+          return null;
+        }
+
+        // ── Infographic segment ────────────────────────────────────
+        if (seg.type === "infographic") {
+          if (seg.infographicType === "planet-size-scale")  return <PlanetSizeScale key={i} />;
+          if (seg.infographicType === "exoplanet-methods")  return <ExoplanetMethodsChart key={i} />;
+          if (seg.infographicType === "stellar-lifecycle")  return <StellarLifecycle key={i} />;
+          if (seg.infographicType === "solar-system-scale") return <SolarSystemScale key={i} />;
+          if (seg.infographicType === "black-hole-anatomy") return <BlackHoleAnatomy key={i} />;
           return null;
         }
 
