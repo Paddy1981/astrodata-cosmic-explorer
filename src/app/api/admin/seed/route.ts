@@ -1,28 +1,34 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { createClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 
-export async function POST() {
-  const cookieStore = cookies();
+export async function POST(req: NextRequest) {
+  // CLI bypass: accept service role key in X-Admin-Key header
+  const adminKeyHeader = req.headers.get("x-admin-key");
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const isCli = adminKeyHeader && serviceKey && adminKeyHeader === serviceKey;
 
-  // Verify admin auth
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() { return cookieStore.getAll(); },
-        setAll(c) { c.forEach(({ name, value, options }) => cookieStore.set(name, value, options)); },
-      },
+  if (!isCli) {
+    const cookieStore = cookies();
+    // Verify admin auth
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() { return cookieStore.getAll(); },
+          setAll(c) { c.forEach(({ name, value, options }) => cookieStore.set(name, value, options)); },
+        },
+      }
+    );
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+    const adminEmail = process.env.ADMIN_EMAIL;
+    if (adminEmail && user.email !== adminEmail) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
-  );
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-  const adminEmail = process.env.ADMIN_EMAIL;
-  if (adminEmail && user.email !== adminEmail) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
   // Service role client — bypasses RLS
