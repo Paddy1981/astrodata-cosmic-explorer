@@ -31,8 +31,11 @@ export async function updateSession(request: NextRequest) {
 
   const pathname = request.nextUrl.pathname;
 
-  // Protect /learn/* routes
-  if (pathname.startsWith("/learn") && !user) {
+  // /learn browse pages (/, /[subject]/[course]) are public.
+  // Only lesson content and account-specific pages require auth.
+  const isLearnLeaf = /^\/learn\/[^/]+\/[^/]+\/.+/.test(pathname); // lesson URLs
+  const isLearnAccount = /^\/learn\/(onboarding|upgrade)/.test(pathname);
+  if ((isLearnLeaf || isLearnAccount) && !user) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.searchParams.set("redirectTo", pathname);

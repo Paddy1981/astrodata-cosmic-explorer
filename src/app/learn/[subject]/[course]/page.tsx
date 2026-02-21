@@ -237,15 +237,18 @@ export default async function CoursePage({ params }: Props) {
             </div>
           )}
 
-          {/* Free course + no user → sign in */}
+          {/* Free course + no user → sign in to enrol */}
           {!course.is_premium && !user && (
-            <div className="mt-8 text-center">
+            <div className="mt-8 text-center space-y-2">
               <Link
                 href={`/login?redirectTo=/learn/${params.subject}/${params.course}`}
-                className="btn-primary no-underline text-base px-8 py-3"
+                className="btn-primary no-underline text-base px-8 py-3 inline-block"
               >
-                Sign in to Enrol →
+                Sign in to Enrol — it&apos;s free →
               </Link>
+              <p className="text-xs text-[#484f58]">
+                Free account · No credit card required
+              </p>
             </div>
           )}
         </>

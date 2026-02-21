@@ -141,35 +141,45 @@ export default async function LearnDashboard({
 }) {
   const supabase = getSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login?redirectTo=/learn");
 
-  const [profileRes, streakRes, subjectsRes, coursesRes, enrollmentsRes] = await Promise.all([
-    supabase.from("profiles").select("*").eq("id", user.id).single(),
-    supabase.from("streaks").select("*").eq("user_id", user.id).single(),
+  // Always fetch public course data
+  const [subjectsRes, coursesRes] = await Promise.all([
     supabase.from("subjects").select("*").order("order"),
     supabase
       .from("courses")
       .select("*, subjects(id, title, slug, color, icon_name)")
       .eq("status", "published")
       .order("order_index"),
-    supabase
-      .from("course_enrollments")
-      .select("course_id, enrolled_at")
-      .eq("user_id", user.id)
-      .order("enrolled_at", { ascending: false }),
   ]);
 
-  const profile = profileRes.data;
-  const streak = streakRes.data;
+  // User-specific data only when logged in
+  let profile: any = null;
+  let streak: any = null;
+  let enrollments: any[] = [];
+
+  if (user) {
+    const [profileRes, streakRes, enrollmentsRes] = await Promise.all([
+      supabase.from("profiles").select("*").eq("id", user.id).single(),
+      supabase.from("streaks").select("*").eq("user_id", user.id).single(),
+      supabase
+        .from("course_enrollments")
+        .select("course_id, enrolled_at")
+        .eq("user_id", user.id)
+        .order("enrolled_at", { ascending: false }),
+    ]);
+    profile = profileRes.data;
+    streak = streakRes.data;
+    enrollments = enrollmentsRes.data ?? [];
+
+    if (profile && !profile.onboarding_complete) redirect("/learn/onboarding");
+  }
+
   const subjects = subjectsRes.data ?? [];
   const courses = coursesRes.data ?? [];
-  const enrollments = enrollmentsRes.data ?? [];
   const userIsPremium: boolean = profile?.is_premium ?? false;
 
-  if (profile && !profile.onboarding_complete) redirect("/learn/onboarding");
-
   const displayName =
-    profile?.display_name ?? profile?.full_name ?? user.email?.split("@")[0] ?? "Explorer";
+    profile?.display_name ?? profile?.full_name ?? user?.email?.split("@")[0] ?? "Explorer";
   const totalXp = profile?.xp ?? 0;
   const level = profile?.level ?? 1;
   const xp = xpInfo(totalXp, level);
@@ -213,7 +223,7 @@ export default async function LearnDashboard({
     const { data: progressData } = await supabase
       .from("user_progress")
       .select("lesson_id")
-      .eq("user_id", user.id)
+      .eq("user_id", user!.id)
       .eq("status", "completed");
 
     const completedSet = new Set((progressData ?? []).map((p: any) => p.lesson_id));
@@ -272,58 +282,76 @@ export default async function LearnDashboard({
   return (
     <div className="content-container py-10 space-y-10">
 
-      {/* ── Greeting ── */}
-      <div>
-        <h1 className="text-3xl font-bold text-[#e6edf3]">
-          Welcome back, <span className="text-gradient">{displayName}</span> 👋
-        </h1>
-        <p className="text-[#8b949e] mt-1">Continue your journey through the cosmos.</p>
-      </div>
-
-      {/* ── Stats bar ── */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {/* XP */}
-        <div className="cosmic-card p-5">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-xs text-[#8b949e] uppercase tracking-wider">Experience</span>
-            <span className="badge badge-purple">Level {level}</span>
+      {user ? (
+        <>
+          {/* ── Authenticated: greeting + stats ── */}
+          <div>
+            <h1 className="text-3xl font-bold text-[#e6edf3]">
+              Welcome back, <span className="text-gradient">{displayName}</span> 👋
+            </h1>
+            <p className="text-[#8b949e] mt-1">Continue your journey through the cosmos.</p>
           </div>
-          <div className="text-2xl font-bold text-[#e6edf3] mb-2">{totalXp} XP</div>
-          <div className="xp-bar">
-            <div className="xp-fill" style={{ width: `${xp.percent}%` }} />
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="cosmic-card p-5">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs text-[#8b949e] uppercase tracking-wider">Experience</span>
+                <span className="badge badge-purple">Level {level}</span>
+              </div>
+              <div className="text-2xl font-bold text-[#e6edf3] mb-2">{totalXp} XP</div>
+              <div className="xp-bar">
+                <div className="xp-fill" style={{ width: `${xp.percent}%` }} />
+              </div>
+              <p className="text-xs text-[#8b949e] mt-1.5">{xp.progress} / {xp.needed} to Level {level + 1}</p>
+            </div>
+            <div className="cosmic-card p-5">
+              <div className="text-xs text-[#8b949e] uppercase tracking-wider mb-3">Daily Streak</div>
+              <div className="flex items-end gap-2">
+                <span className="text-4xl">🔥</span>
+                <span className="text-3xl font-bold text-[#f0883e]">{streak?.current_streak ?? 0}</span>
+                <span className="text-[#8b949e] text-sm pb-1">days</span>
+              </div>
+              {streak && streak.longest_streak > 0 && (
+                <p className="text-xs text-[#8b949e] mt-2">Best: {streak.longest_streak} days</p>
+              )}
+            </div>
+            <div className="cosmic-card p-5 flex flex-col justify-between">
+              <div className="text-xs text-[#8b949e] uppercase tracking-wider mb-3">Quick Start</div>
+              <p className="text-sm text-[#c9d1d9] mb-4">Pick up where you left off or start something new.</p>
+              {quickStartHref ? (
+                <Link href={quickStartHref} className="btn-primary text-sm no-underline">
+                  Continue Learning →
+                </Link>
+              ) : (
+                <span className="text-xs text-[#8b949e]">No courses available yet.</span>
+              )}
+            </div>
           </div>
-          <p className="text-xs text-[#8b949e] mt-1.5">{xp.progress} / {xp.needed} to Level {level + 1}</p>
-        </div>
-
-        {/* Streak */}
-        <div className="cosmic-card p-5">
-          <div className="text-xs text-[#8b949e] uppercase tracking-wider mb-3">Daily Streak</div>
-          <div className="flex items-end gap-2">
-            <span className="text-4xl">🔥</span>
-            <span className="text-3xl font-bold text-[#f0883e]">{streak?.current_streak ?? 0}</span>
-            <span className="text-[#8b949e] text-sm pb-1">days</span>
+        </>
+      ) : (
+        /* ── Guest: hero banner ── */
+        <div className="rounded-2xl border border-[#30363d] bg-[#161b22] p-8 flex flex-col sm:flex-row items-center gap-6">
+          <div className="text-5xl">🔭</div>
+          <div className="flex-1">
+            <h1 className="text-2xl font-bold text-[#e6edf3] mb-1">
+              Explore the Universe — for free
+            </h1>
+            <p className="text-[#8b949e] text-sm leading-relaxed">
+              Browse {courses.length} astronomy and astrophysics courses across {subjects.length} subjects.
+              Sign in to enrol, track your progress, earn XP, and unlock premium content.
+            </p>
           </div>
-          {streak && streak.longest_streak > 0 && (
-            <p className="text-xs text-[#8b949e] mt-2">Best: {streak.longest_streak} days</p>
-          )}
+          <Link
+            href="/login?redirectTo=/learn"
+            className="btn-primary no-underline text-sm px-6 py-2.5 shrink-0"
+          >
+            Sign in free →
+          </Link>
         </div>
+      )}
 
-        {/* Quick start */}
-        <div className="cosmic-card p-5 flex flex-col justify-between">
-          <div className="text-xs text-[#8b949e] uppercase tracking-wider mb-3">Quick Start</div>
-          <p className="text-sm text-[#c9d1d9] mb-4">Pick up where you left off or start something new.</p>
-          {quickStartHref ? (
-            <Link href={quickStartHref} className="btn-primary text-sm no-underline">
-              Continue Learning →
-            </Link>
-          ) : (
-            <span className="text-xs text-[#8b949e]">No courses available yet.</span>
-          )}
-        </div>
-      </div>
-
-      {/* ── Premium upsell banner (free users only) ── */}
-      {!userIsPremium && (
+      {/* ── Premium upsell (logged-in free users only) ── */}
+      {user && !userIsPremium && (
         <div className="rounded-2xl border border-[#f7cc4a30] bg-[#f7cc4a0d] p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <span className="text-3xl">⭐</span>
@@ -344,7 +372,7 @@ export default async function LearnDashboard({
         </div>
       )}
 
-      {/* ── My Courses ── */}
+      {/* ── My Courses (logged-in only) ── */}
       {enrolledWithProgress.length > 0 && (
         <div>
           <div className="flex items-center justify-between mb-4">
